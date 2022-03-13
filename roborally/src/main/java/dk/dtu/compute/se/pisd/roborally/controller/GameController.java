@@ -197,22 +197,22 @@ public class GameController {
 
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) {
-
+        executeCommand(player, Command.FORWARD);
     }
 
     // TODO Assignment V2
     public void fastForward(@NotNull Player player) {
-
+        executeCommand(player, Command.FAST_FORWARD);
     }
 
     // TODO Assignment V2
     public void turnRight(@NotNull Player player) {
-
+        executeCommand(player, Command.RIGHT);
     }
 
     // TODO Assignment V2
     public void turnLeft(@NotNull Player player) {
-
+        executeCommand(player, Command.LEFT);
     }
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
