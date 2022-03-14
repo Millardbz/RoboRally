@@ -190,16 +190,20 @@ public class GameController {
 
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) {
-        switch(player.getHeading()){ //Determines the direction to move depending on the player's heading.
-            case NORTH -> player.setSpace(board.getSpace(player.getSpace().x, player.getSpace().y - 1));
-            case EAST -> player.setSpace(board.getSpace(player.getSpace().x + 1, player.getSpace().y));
-            case SOUTH -> player.setSpace(board.getSpace(player.getSpace().x, player.getSpace().y + 1));
-            case WEST -> player.setSpace(board.getSpace(player.getSpace().x - 1, player.getSpace().y));
+        //A statement that makes sure the space in front of the player is within the boundaries of the board
+        if (player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height &&
+                player.getSpace().x - 1 >= 0 && player.getSpace().y - 1 >= 0) {
+            //Determines the direction to move depending on the player's heading.
+            switch (player.getHeading()) {
+                case NORTH -> player.setSpace(board.getSpace(player.getSpace().x, player.getSpace().y - 1));
+                case EAST -> player.setSpace(board.getSpace(player.getSpace().x + 1, player.getSpace().y));
+                case SOUTH -> player.setSpace(board.getSpace(player.getSpace().x, player.getSpace().y + 1));
+                case WEST -> player.setSpace(board.getSpace(player.getSpace().x - 1, player.getSpace().y));
+            }
         }
     }
     // TODO Assignment V2
     public void fastForward(@NotNull Player player) {
-        executeCommand(player, Command.FAST_FORWARD);
 
     }
     // TODO Assignment V2
