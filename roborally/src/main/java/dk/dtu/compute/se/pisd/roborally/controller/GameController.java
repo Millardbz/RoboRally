@@ -198,6 +198,7 @@ public class GameController {
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) {
 
+
     // TODO Assignment V2
     public void fastForward(@NotNull Player player) {
     }
