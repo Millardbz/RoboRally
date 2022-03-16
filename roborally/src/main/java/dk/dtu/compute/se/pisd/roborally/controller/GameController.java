@@ -191,7 +191,7 @@ public class GameController {
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) { //Moves the robot 1 square in player's heading
         //A statement that makes sure the space in front of the player is within the boundaries of the board
-        if (player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height &&
+        if (player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
                 player.getSpace().x - 1 >= 0 && player.getSpace().y - 1 >= 0) {
             //Determines the direction to move depending on the player's heading.
             switch (player.getHeading()) {
