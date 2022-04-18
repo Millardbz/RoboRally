@@ -27,9 +27,12 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,13 +92,34 @@ public class SpaceView extends StackPane implements ViewObserver {
             arrow.setRotate((90*player.getHeading().ordinal())%360);
             this.getChildren().add(arrow);
         }
+
+
     }
 
     @Override
     public void updateView(Subject subject) {
+
         if (subject == this.space) {
             updatePlayer();
         }
+        for(int i = 0; i < 5; i++){
+            boolean[] xy = new boolean[]{space.x == 1 && space.y == 2,
+                                         space.x == 4 && space.y == 5,
+                                         space.x == 3 && space.y == 4,
+                                         space.x == 0 && space.y == 6,
+                                         space.x == 6 && space.y == 3};
+            if(xy[i]){
+                Canvas canvas =
+                        new Canvas(SPACE_WIDTH, SPACE_HEIGHT);
+                GraphicsContext gc =
+                        canvas.getGraphicsContext2D();
+                gc.setStroke(Color.RED);
+                gc.setLineWidth(5);
+                gc.setLineCap(StrokeLineCap.ROUND);
+                gc.strokeLine(2, SPACE_HEIGHT-2,
+                        SPACE_WIDTH-2, SPACE_HEIGHT-2);
+                this.getChildren().add(canvas);
+            }
+        }
     }
-
 }

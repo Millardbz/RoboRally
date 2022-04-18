@@ -145,7 +145,7 @@ public class GameController {
                 if (card != null) {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
-                    board.setPhase(Phase.PLAYER_INTERACTION); //Makes the options for the player.
+                    board.setPhase(Phase.PLAYER_INTERACTION); //Makes the options for the player after executing command.
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
