@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"dk.dtu.compute.se.pisd.designpatterns.observer"},{"l":"dk.dtu.compute.se.pisd.roborally"},{"l":"dk.dtu.compute.se.pisd.roborally.controller"},{"l":"dk.dtu.compute.se.pisd.roborally.model"},{"l":"dk.dtu.compute.se.pisd.roborally.view"}];updateSearchResults();
