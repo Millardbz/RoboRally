@@ -191,8 +191,6 @@ public class PlayerView extends Tab implements ViewObserver {
                         executeButton.setDisable(true);
                         stepButton.setDisable(true);
                 }
-
-
             } else {
                 if (!programPane.getChildren().contains(playerInteractionPanel)) {
                     programPane.getChildren().remove(buttonPanel);
@@ -209,11 +207,6 @@ public class PlayerView extends Tab implements ViewObserver {
                 optionButton.setOnAction(e -> gameController.executeCommandAndContinue(Command.RIGHT));
                 optionButton.setDisable(false);
                 playerInteractionPanel.getChildren().add(optionButton);
-
-                    // TODO Assignment V3: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
 
             }
         }

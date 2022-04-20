@@ -24,7 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
 /**
  * ...
@@ -133,4 +133,26 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    public boolean hasWallAtHeading(){
+        int x = this.space.x;
+        int y = this.space.y;
+        boolean[] wall = new boolean[]{
+                x == 3 && y == 4 && this.heading == NORTH,
+                x == 4 && y == 5 && this.heading == EAST,
+                x == 1 && y == 2 && this.heading == SOUTH,
+                x == 1 && y == 6 && this.heading == WEST,
+                x == 6 && y == 3 && this.heading == NORTH,
+                //The space on the other side of the wall with opposite heading.
+                x == 3 && y == 3 && this.heading == SOUTH,  // y - 1
+                x == 4 && y == 6 && this.heading == WEST,   // y + 1
+                x == 1 && y == 3 && this.heading == NORTH,  // y + 1
+                x == 0 && y == 6 && this.heading == EAST,   // x - 1
+                x == 6 && y == 2 && this.heading == SOUTH}; // y - 1
+        for (boolean b : wall) {
+            if (b) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -103,23 +103,55 @@ public class SpaceView extends StackPane implements ViewObserver {
             updatePlayer();
         }
         for(int i = 0; i < 5; i++){
-            boolean[] xy = new boolean[]{space.x == 1 && space.y == 2,
-                                         space.x == 4 && space.y == 5,
-                                         space.x == 3 && space.y == 4,
-                                         space.x == 0 && space.y == 6,
-                                         space.x == 6 && space.y == 3};
-            if(xy[i]){
+            boolean[] hasWall = new boolean[]{
+                    space.x == 3 && space.y == 4,
+                    space.x == 4 && space.y == 5,
+                    space.x == 1 && space.y == 2,
+                    space.x == 1 && space.y == 6,
+                    space.x == 6 && space.y == 3};
+            int k = i;
+            if(i > 3){k = 0;}
+            if(hasWall[i]){
                 Canvas canvas =
                         new Canvas(SPACE_WIDTH, SPACE_HEIGHT);
                 GraphicsContext gc =
                         canvas.getGraphicsContext2D();
-                gc.setStroke(Color.RED);
-                gc.setLineWidth(5);
-                gc.setLineCap(StrokeLineCap.ROUND);
-                gc.strokeLine(2, SPACE_HEIGHT-2,
-                        SPACE_WIDTH-2, SPACE_HEIGHT-2);
+                switch (k) {
+                    case 0 -> { //NORTH
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(5);
+                        gc.setLineCap(StrokeLineCap.ROUND);
+                        gc.strokeLine(SPACE_WIDTH - 2, 2,
+                                2, 2);
+                    }
+                    case 1 -> { //EAST
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(5);
+                        gc.setLineCap(StrokeLineCap.ROUND);
+                        gc.strokeLine(SPACE_WIDTH - 2, SPACE_HEIGHT - 2,
+                                SPACE_WIDTH - 2, 2);
+                    }
+                    case 2 -> { //SOUTH
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(5);
+                        gc.setLineCap(StrokeLineCap.ROUND);
+                        gc.strokeLine(2, SPACE_HEIGHT - 2,
+                                SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+                    }
+                    case 3 -> {//WEST
+                        gc.setStroke(Color.RED);
+                        gc.setLineWidth(5);
+                        gc.setLineCap(StrokeLineCap.ROUND);
+                        gc.strokeLine(2, SPACE_HEIGHT - 2,
+                                2, 2);
+                    }
+                }
                 this.getChildren().add(canvas);
+
             }
+            k++;
         }
+
+
     }
 }

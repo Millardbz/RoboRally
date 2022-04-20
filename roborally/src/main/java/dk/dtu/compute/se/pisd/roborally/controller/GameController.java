@@ -222,8 +222,12 @@ public class GameController {
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) { //Moves the robot 1 square in player's heading
         //A statement that makes sure the space in front of the player is within the boundaries of the board
-        if (player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
+        if (player != null && player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
                 player.getSpace().x - 1 >= 0 && player.getSpace().y - 1 >= 0) {
+
+            if(player.hasWallAtHeading()){
+                return;
+            }
             //Determines the direction to move depending on player's heading.
             switch (player.getHeading()) {
                 case NORTH -> player.setSpace(board.getSpace(player.getSpace().x, player.getSpace().y - 1));
@@ -232,6 +236,8 @@ public class GameController {
                 case WEST -> player.setSpace(board.getSpace(player.getSpace().x - 1, player.getSpace().y));
             }
         }
+
+
     }
 
     // TODO Assignment V2
@@ -256,9 +262,6 @@ public class GameController {
         }
     }
 
-    public void shootLazer(){
-
-    }
     /**
      * A method called when no corresponding controller operation is implemented yet. This
      * should eventually be removed.
