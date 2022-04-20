@@ -144,8 +144,11 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
+                    if(command.isInteractive()){
+                        board.setPhase(Phase.PLAYER_INTERACTION); //Makes the options for the player after executing command.
+                        return;
+                    }
                     executeCommand(currentPlayer, command);
-                    board.setPhase(Phase.PLAYER_INTERACTION); //Makes the options for the player after executing command.
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
@@ -182,11 +185,38 @@ public class GameController {
                 case RIGHT -> this.turnRight(player);
                 case LEFT -> this.turnLeft(player);
                 case FAST_FORWARD -> this.fastForward(player);
+                case OPTION_LEFT_RIGHT -> this.optionLeftRight(player);
                 default -> {
                 }
                 // DO NOTHING (for now)
             }
         }
+
+    }
+
+    public void executeCommandAndContinue(Command option){
+        board.setPhase(Phase.ACTIVATION);
+        executeCommand(board.getCurrentPlayer(), option);
+        int step = board.getStep();
+        int nextPlayerNumber = board.getPlayerNumber(board.getCurrentPlayer()) + 1;
+        if (nextPlayerNumber < board.getPlayersNumber()) {
+            board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+        } else {
+            step++;
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+                board.setCurrentPlayer(board.getPlayer(0));
+            } else {
+                startProgrammingPhase();
+            }
+        }
+    }
+
+    public void optionLeftRight(Player player){
+      CommandCardField currentCard = player.board.getCurrentPlayer().getCardField(player.board.getStep());
+      currentCard.getCard().command.getOptions().add(Command.LEFT);
+      currentCard.getCard().command.getOptions().add(Command.RIGHT);
     }
 
     // TODO Assignment V2
@@ -226,6 +256,9 @@ public class GameController {
         }
     }
 
+    public void shootLazer(){
+
+    }
     /**
      * A method called when no corresponding controller operation is implemented yet. This
      * should eventually be removed.
