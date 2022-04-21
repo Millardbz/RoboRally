@@ -45,13 +45,7 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO Assignment V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free()
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if the player is moved
+
 
     }
 
@@ -77,15 +71,21 @@ public class GameController {
             }
         }
     }
-
-    // XXX: V2
+    /**
+     * This functions creates the command cards and each kind of command card is being created
+     * randomly, within the lenghth of the array of different kinds of command cards
+     * @return commandCard objects
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
     }
 
-    // XXX: V2
+    /**
+     * This function set the game from the programming phase to the activation phase for all players.
+     * This function stops all the players from moving.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -94,7 +94,11 @@ public class GameController {
         board.setStep(0);
     }
 
-    // XXX: V2
+    /**
+     * The purpose of this function is to display to the player, what kind of programming cards is at the players disposal
+     * in the register.
+     * @param register
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -116,26 +120,32 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * The game provide to options, which were either to execute a single command of the programming cards in the robots
+     * register or to execute all the the commands of the programming cards of the register.
+     * This method is responsible to provide the player the option of executing just a single command of a single
+     * programming card in the register.
+     *
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * this method is responsible for executing all of the commands in the register - unlike the executePrograms() method.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX: V2
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    // XXX: V2
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -194,6 +204,10 @@ public class GameController {
 
     }
 
+    /**
+     * The method executes the chosen heading and continues the program
+     * @param option
+     */
     public void executeCommandAndContinue(Command option){
         board.setPhase(Phase.ACTIVATION);
         executeCommand(board.getCurrentPlayer(), option);
@@ -219,7 +233,6 @@ public class GameController {
       currentCard.getCard().command.getOptions().add(Command.RIGHT);
     }
 
-    // TODO Assignment V2
     public void moveForward(@NotNull Player player) { //Moves the robot 1 square in player's heading
         //A statement that makes sure the space in front of the player is within the boundaries of the board
         if (player != null && player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
@@ -243,21 +256,11 @@ public class GameController {
         }
     }
 
-    public void robotPushNeighbour(Player player){
-       Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
-       if(neighbourSpace.getPlayer() != null){
-           neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));
-       }
-    }
-
-    // TODO Assignment V2
     //Moves the robot 2 squares in player's heading
     public void fastForward(@NotNull Player player) {for(int i = 0; i < 2; i++){moveForward(player);}}
 
-    // TODO Assignment V2
     public void turnRight(@NotNull Player player) {player.setHeading(player.getHeading().next());}
 
-    // TODO Assignment V2
     public void turnLeft(@NotNull Player player) {player.setHeading(player.getHeading().prev());}
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
@@ -275,15 +278,11 @@ public class GameController {
     public void conveyorBeltMovePlayer(Player player, Heading heading, int level){
             for(int i = 0; i < level; i++){player.setSpace(board.getNeighbour(player.getSpace(), heading));}
     }
-
-
-    /**
-     * A method called when no corresponding controller operation is implemented yet. This
-     * should eventually be removed.
-     */
-    public void notImplemented() {
-        // XXX just for now to indicate that the actual method is not yet implemented
-        assert false;
+    public void robotPushNeighbour(Player player){
+        Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
+        if(neighbourSpace.getPlayer() != null){
+            neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));
+        }
     }
 
 }

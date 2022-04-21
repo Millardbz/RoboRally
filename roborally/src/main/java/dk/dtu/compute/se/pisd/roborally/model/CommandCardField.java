@@ -36,7 +36,10 @@ public class CommandCardField extends Subject {
     private CommandCard card;
 
     private boolean visible;
-
+    /**
+     * CommandCardField constructor.
+     * @param player
+     */
     public CommandCardField(Player player) {
         this.player = player;
         this. card = null;
@@ -53,11 +56,18 @@ public class CommandCardField extends Subject {
             notifyChange();
         }
     }
-
+    /**
+     * this methods makes sure that the commandCards are visible on the UI.
+     * @return visible
+     */
     public boolean isVisible() {
         return visible;
     }
-
+    /**
+     * notifies the player that the command cards at the players disposal has changed,
+     * which it will throughtout the progress of the game.
+     * @param visible
+     */
     public void setVisible(boolean visible) {
         if (visible != this.visible) {
             this.visible = visible;

@@ -47,7 +47,18 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
-
+    /**
+     * contructor for each player object.
+     *
+     * Most interesting is that each player has an array, that represents the register that
+     * is going to store the programming cards, that the player is going to have throughout the
+     * progress of the game.
+     *
+     * There is another array representing the cards themselves.
+     * @param board
+     * @param color
+     * @param name
+     */
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
         this.name = name;
