@@ -34,6 +34,10 @@ public class CommandCard extends Subject {
 
     final public Command command;
 
+    /**
+     * command card constructor
+     * @param command
+     */
     public CommandCard(@NotNull Command command) {
         this.command = command;
     }

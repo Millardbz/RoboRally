@@ -55,10 +55,19 @@ public class AppController implements Observer {
 
     private GameController gameController;
 
+    /**
+     * This method instantiates a roboRally game object
+     * @param roboRally
+     */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
     }
-
+    /**
+     * This method provides the players of the game, the opportunity to begin a new game in the UI.
+     * And begins the game, when the number of participants of the game has been chosen, in the if-
+     * statements below the UI-functions. Below the if-statements, a new gameboard has been initiated
+     * and the players will be added to the board.
+     */
     public void newGame() {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
@@ -75,7 +84,7 @@ public class AppController implements Observer {
             }
 
             // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
+            // here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
             gameController = new GameController(board);
             int no = result.get();
@@ -92,11 +101,18 @@ public class AppController implements Observer {
             roboRally.createBoardView(gameController);
         }
     }
-
+    /**
+     * For now, this is an empty method, but this method should enable the user to same an unfinished
+     * game.
+     */
     public void saveGame() {
         // XXX needs to be implemented eventually
     }
-
+    /**
+     * For now, this method is not finished. This should load an unfinished game, that has previously
+     * been saved. Right now, this functions invokes the new game function, as long as a
+     * gameController object has been instantiated.
+     */
     public void loadGame() {
         // XXX needs to be implememted eventually
         // for now, we just create a new game
@@ -126,7 +142,16 @@ public class AppController implements Observer {
         }
         return false;
     }
-
+    /**
+     * The first conditional makes sure, that this function can only be invoked as long as a game
+     * has been instantiated. Below that conditional, a UI dialog begins, asking the user, weather
+     * the user is sure, that he/she wants to quit the game. The option to quit the game or not to
+     * quit the game is being provided by a UI botton function, that performs the termination the game
+     * if the user confirms that the do want to quit the game and resumes the game, if the do not
+     * want to quit the game.
+     *
+     * @return an application that has been shut down.
+     */
     public void exit() {
         if (gameController != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -145,12 +170,25 @@ public class AppController implements Observer {
             Platform.exit();
         }
     }
-
+    /**
+     * This boolean function determines weather the game is running or not.
+     * If this boolean is true, that means that a game is running and makes sure that
+     * throughout the process of running the game, the gameController object is going to be
+     * present, thereby prevent the game from running the without a gameController object.
+     * In other words, nobody is interested in running the game without the game control measures.
+     *
+     * @return
+     */
     public boolean isGameRunning() {
         return gameController != null;
     }
 
-
+    /**
+     * The purpose of this function is to update the events displayed on the game UI.
+     * for example, if a robot moves, this motion is going to be shown on the roborally board
+     * user interface.
+     * @param subject the subject which changed
+     */
     @Override
     public void update(Subject subject) {
         // XXX do nothing for now

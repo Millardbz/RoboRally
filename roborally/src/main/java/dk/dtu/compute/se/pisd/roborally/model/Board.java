@@ -56,7 +56,12 @@ public class Board extends Subject {
     private int step = 0;
 
     private boolean stepMode;
-
+    /**
+     * board constructor.
+     * @param width
+     * @param height
+     * @param boardName
+     */
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
         this.width = width;
@@ -70,7 +75,11 @@ public class Board extends Subject {
         }
         this.stepMode = false;
     }
-
+    /**
+     * Another board constructor?
+     * @param width
+     * @param height
+     */
     public Board(int width, int height) {
         this(width, height, "defaultboard");
     }
@@ -78,7 +87,11 @@ public class Board extends Subject {
     public Integer getGameId() {
         return gameId;
     }
-
+    /**
+     * this function lets the players identify a specific game. It creates a specific ID for reference
+     * and makes sure, that this ID can't be dublicated.
+     * @param gameId
+     */
     public void setGameId(int gameId) {
         if (this.gameId == null) {
             this.gameId = gameId;
@@ -88,7 +101,12 @@ public class Board extends Subject {
             }
         }
     }
-
+    /**
+     * This method creates the game board spaces.
+     * @param x
+     * @param y
+     * @return
+     */
     public Space getSpace(int x, int y) {
         if (x >= 0 && x < width &&
                 y >= 0 && y < height) {
@@ -97,18 +115,29 @@ public class Board extends Subject {
             return null;
         }
     }
-
+    /**
+     * loads the number of players the game.
+     * @return the size of the length of players in the array of player objects
+     */
     public int getPlayersNumber() {
         return players.size();
     }
-
+    /**
+     * this loads each player of the game onto the game board itself
+     * @param player
+     */
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
             notifyChange();
         }
     }
-
+    /**
+     * your usual get method for each player. as any get-method is a reference for the system to
+     * interact with each player.
+     * @param i
+     * @return players
+     */
     public Player getPlayer(int i) {
         if (i >= 0 && i < players.size()) {
             return players.get(i);
@@ -116,18 +145,30 @@ public class Board extends Subject {
             return null;
         }
     }
-
+    /**
+     * This is a reference, that makes sure that the game system can reach the player that
+     * has the turn of the game.
+     * @return current
+     */
     public Player getCurrentPlayer() {
         return current;
     }
-
+    /**
+     * This is a reference, that makes sure that the game system register the game, that the player
+     * who has the turn is making.
+     *
+     * @return Player
+     */
     public void setCurrentPlayer(Player player) {
         if (player != this.current && players.contains(player)) {
             this.current = player;
             notifyChange();
         }
     }
-
+    /**
+     * registers which phase the game is currently in.
+     * @return phase
+     */
     public Phase getPhase() {
         return phase;
     }

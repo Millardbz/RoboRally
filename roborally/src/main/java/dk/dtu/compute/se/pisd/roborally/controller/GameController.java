@@ -55,7 +55,16 @@ public class GameController {
 
     }
 
-    // XXX: V2
+    /**
+     * This function is void and starts the programming phase of the game.
+     *
+     * the setPhase function will be set to PROGRAMMING for all the players on the board and
+     * no robot is going to be moving during this phase.
+     *
+     * The for-loops parses through every player present on the gameBoard and provide the players
+     * with registers to store there programming cards, and make set programming cards visible to the
+     * players. The second for-loop adds cards to players registers.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -78,14 +87,21 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * This functions creates the command cards and each kind of command card is being created
+     * randomly, within the lenghth of the array of different kinds of command cards
+     * @return commandCard objects
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
     }
 
-    // XXX: V2
+    /**
+     * This function set the game from the programming phase to the activation phase for all players.
+     * This function stops all the players from moving.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -94,7 +110,11 @@ public class GameController {
         board.setStep(0);
     }
 
-    // XXX: V2
+    /**
+     * The purpose of this function is to display to the player, what kind of programming cards is at the players disposal
+     * in the register.
+     * @param register
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -105,7 +125,9 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * We don't understand the Idea of function...
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -116,26 +138,46 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * The game provide to options, which were either to execute a single command of the programming cards in the robots
+     * register or to execute all the the commands of the programming cards of the register.
+     * This method is responsible to provide the player the option of executing just a single
+     * command of a single programming card in the register.
+     *
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * this method is responsible for executing all of the commands in the register -
+     * unlike the executePrograms() method.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     *  This function invokes the executeNextStep() - as a consequence, this method switches the
+     *  game from the activation phase to the programming phase.
+     *
+     *  In other words, this function executes the programming cards in each players register.
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    // XXX: V2
+    /**
+     * This method accesses the current player of the game, and moves the player, when the game has "switch back to
+     * the activation phase". There is a conditional, that instructs as lang as the number of steps is greather than or qual to
+     * zero and that the player has a register, the instructions of set programming will be executed.
+     *
+     * After the instructions have been carried out, the game switches to the next player.
+     */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -173,7 +215,14 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+    /**
+     * This method is going to carry out the different commands, that each programming card instructs.
+     * Those are those specific instructions themselves, unlike the other methods in this class, this method
+     * is not responsible for keeping the game progressing, but instead is responsible for carrying out the
+     * commands themselves.
+     * @param player
+     * @param command
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
