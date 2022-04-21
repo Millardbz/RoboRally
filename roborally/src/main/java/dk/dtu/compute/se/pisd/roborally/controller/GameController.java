@@ -228,7 +228,7 @@ public class GameController {
             if(player.getSpace().hasWallAtHeading(player.getHeading())){
                 return;
             }else if(player.getSpace().hasConveyorBeltWithHeading()){
-                player.setSpace(board.getNeighbour(player.getSpace(), Heading.SOUTH));
+                conveyorBeltMovePlayer(player, Heading.SOUTH, 1);
                 //check if there is a player in front of current player and then pushes
             } else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){
                 robotPushNeighbour(player);
@@ -272,8 +272,8 @@ public class GameController {
         }
     }
 
-    public void conveyorBeltMovePlayer(Player player, Heading heading){
-
+    public void conveyorBeltMovePlayer(Player player, Heading heading, int level){
+            for(int i = 0; i < level; i++){player.setSpace(board.getNeighbour(player.getSpace(), heading));}
     }
 
 
