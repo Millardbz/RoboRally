@@ -102,13 +102,15 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (subject == this.space) {
             updatePlayer();
         }
-        for(int i = 0; i < 5; i++){
-            boolean[] hasWall = new boolean[]{
-                    space.x == 3 && space.y == 4,
-                    space.x == 4 && space.y == 5,
-                    space.x == 1 && space.y == 2,
-                    space.x == 1 && space.y == 6,
-                    space.x == 6 && space.y == 3};
+
+        boolean[] hasWall = new boolean[]{
+                space.x == 3 && space.y == 4,
+                space.x == 4 && space.y == 5,
+                space.x == 1 && space.y == 2,
+                space.x == 1 && space.y == 6,
+                space.x == 6 && space.y == 3};
+        for(int i = 0; i < hasWall.length; i++){
+
             int k = i;
             if(i > 3){k = 0;}
             if(hasWall[i]){
@@ -121,35 +123,62 @@ public class SpaceView extends StackPane implements ViewObserver {
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
                         gc.setLineCap(StrokeLineCap.ROUND);
-                        gc.strokeLine(SPACE_WIDTH - 2, 2,
-                                2, 2);
+                        gc.strokeLine(SPACE_WIDTH - 2, 2, 2, 2);
                     }
                     case 1 -> { //EAST
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
                         gc.setLineCap(StrokeLineCap.ROUND);
-                        gc.strokeLine(SPACE_WIDTH - 2, SPACE_HEIGHT - 2,
-                                SPACE_WIDTH - 2, 2);
+                        gc.strokeLine(SPACE_WIDTH - 2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, 2);
                     }
                     case 2 -> { //SOUTH
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
                         gc.setLineCap(StrokeLineCap.ROUND);
-                        gc.strokeLine(2, SPACE_HEIGHT - 2,
-                                SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+                        gc.strokeLine(2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
                     }
                     case 3 -> {//WEST
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
                         gc.setLineCap(StrokeLineCap.ROUND);
-                        gc.strokeLine(2, SPACE_HEIGHT - 2,
-                                2, 2);
+                        gc.strokeLine(2, SPACE_HEIGHT - 2, 2, 2);
                     }
                 }
                 this.getChildren().add(canvas);
 
             }
             k++;
+        }
+
+        Canvas canvas = new Canvas(SPACE_WIDTH, SPACE_HEIGHT);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        boolean[] hasConvayorBelt = new boolean[]{
+                space.x == 5 && space.y == 1,
+                space.x == 5 && space.y == 2,
+                space.x == 5 && space.y == 3,
+                space.x == 2 && space.y == 4,
+                space.x == 2 && space.y == 5,
+                space.x == 2 && space.y == 6};
+        for(int i = 0; i < hasConvayorBelt.length; i++){
+            if(hasConvayorBelt[i]){
+                gc.setStroke(Color.BLUE);
+                gc.setLineWidth(5);
+                gc.setLineCap(StrokeLineCap.ROUND);
+                gc.strokeLine(30, 30, 30, 2);
+
+                Polygon arrow = new Polygon(0, 0,
+                        5, 10,
+                        10, 0 );
+                try {
+                    arrow.setFill(Color.BLUE);
+                } catch (Exception e) {
+                    arrow.setFill(Color.MEDIUMPURPLE);
+                }
+               // arrow.setRotate((90*Heading.WEST.ordinal())%360);
+                this.getChildren().add(arrow);
+                this.getChildren().add(canvas);
+            }
         }
 
 

@@ -53,6 +53,7 @@ public class BoardView extends VBox implements ViewObserver {
 
     private SpaceEventHandler spaceEventHandler;
 
+
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
@@ -107,7 +108,6 @@ public class BoardView extends VBox implements ViewObserver {
                 SpaceView spaceView = (SpaceView) source;
                 Space space = spaceView.space;
                 Board board = space.board;
-
                 if (board == gameController.board) {
                     gameController.moveCurrentPlayerToSpace(space);
                     event.consume();

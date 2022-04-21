@@ -224,9 +224,14 @@ public class GameController {
         //A statement that makes sure the space in front of the player is within the boundaries of the board
         if (player != null && player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
                 player.getSpace().x - 1 >= 0 && player.getSpace().y - 1 >= 0) {
-
-            if(player.hasWallAtHeading()){
+            //Checks if there is a wall in the way of movement
+            if(player.getSpace().hasWallAtHeading(player.getHeading())){
                 return;
+            }else if(player.getSpace().hasConveyorBeltWithHeading()){
+                player.setSpace(board.getNeighbour(player.getSpace(), Heading.SOUTH));
+                //check if there is a player in front of current player and then pushes
+            } else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){
+                robotPushNeighbour(player);
             }
             //Determines the direction to move depending on player's heading.
             switch (player.getHeading()) {
@@ -236,8 +241,13 @@ public class GameController {
                 case WEST -> player.setSpace(board.getSpace(player.getSpace().x - 1, player.getSpace().y));
             }
         }
+    }
 
-
+    public void robotPushNeighbour(Player player){
+       Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
+       if(neighbourSpace.getPlayer() != null){
+           neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));
+       }
     }
 
     // TODO Assignment V2
@@ -261,6 +271,11 @@ public class GameController {
             return false;
         }
     }
+
+    public void conveyorBeltMovePlayer(Player player, Heading heading){
+
+    }
+
 
     /**
      * A method called when no corresponding controller operation is implemented yet. This

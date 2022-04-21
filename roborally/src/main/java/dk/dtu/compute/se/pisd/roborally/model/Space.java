@@ -23,6 +23,9 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+
 /**
  * ...
  *
@@ -63,6 +66,46 @@ public class Space extends Subject {
             }
             notifyChange();
         }
+    }
+    public boolean hasWallAtHeading(Heading heading){
+        int x = player.getSpace().x;
+        int y = player.getSpace().y;
+        boolean[] wall = new boolean[]{
+                x == 3 && y == 4 && heading == NORTH,
+                x == 4 && y == 5 && heading == EAST,
+                x == 1 && y == 2 && heading == SOUTH,
+                x == 1 && y == 6 && heading == WEST,
+                x == 6 && y == 3 && heading == NORTH,
+                //The spaces on the other side of the walls with opposite heading.
+                x == 3 && y == 3 && heading == SOUTH,  // y - 1
+                x == 4 && y == 6 && heading == WEST,   // y + 1
+                x == 1 && y == 3 && heading == NORTH,  // y + 1
+                x == 0 && y == 6 && heading == EAST,   // x - 1
+                x == 6 && y == 2 && heading == SOUTH}; // y - 1
+        for (boolean b : wall) {
+            if (b) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasConveyorBeltWithHeading(){
+        int x = player.getSpace().x;
+        int y = player.getSpace().y;
+        boolean[] hasConvayorBelt = new boolean[]{
+                x == 5 && y == 1,
+                x == 5 && y == 2,
+                x == 5 && y == 3,
+                x == 2 && y == 4,
+                x == 2 && y == 5,
+                x == 2 && y == 6};
+        for (boolean b : hasConvayorBelt) {
+            if (b) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void playerChanged() {
