@@ -56,6 +56,7 @@ public class Board extends Subject {
     private int step = 0;
 
     private boolean stepMode;
+
     /**
      * board constructor.
      * @param width

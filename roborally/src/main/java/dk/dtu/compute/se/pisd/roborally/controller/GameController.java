@@ -147,7 +147,11 @@ public class GameController {
     }
 
     private void executeNextStep() {
+        conveyorBelts();
         Player currentPlayer = board.getCurrentPlayer();
+        if(currentPlayer.getSpace().getConveyorBelt() != null) {
+            conveyorBeltMovePlayer(currentPlayer);
+        }
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -240,11 +244,8 @@ public class GameController {
             //Checks if there is a wall in the way of movement
             if(player.getSpace().hasWallAtHeading(player.getHeading())){
                 return;
-            }else if(player.getSpace().hasConveyorBeltWithHeading()){
-                conveyorBeltMovePlayer(player, Heading.SOUTH, 1);
-                //check if there is a player in front of current player and then pushes
-            } else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){
-                robotPushNeighbour(player);
+            }else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){ //check if there is a player in front of current player and then pushes
+                robotPushNeighbourRobot(player);
             }
             //Determines the direction to move depending on player's heading.
             switch (player.getHeading()) {
@@ -275,10 +276,23 @@ public class GameController {
         }
     }
 
-    public void conveyorBeltMovePlayer(Player player, Heading heading, int level){
-            for(int i = 0; i < level; i++){player.setSpace(board.getNeighbour(player.getSpace(), heading));}
+    void conveyorBelts(){
+        board.getSpace(5, 1).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(5, 2).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(5, 3).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(2, 4).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(2, 5).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(2, 6).setConveyorBelt(1, Heading.SOUTH);
     }
-    public void robotPushNeighbour(Player player){
+
+    public void conveyorBeltMovePlayer(Player player){
+        ConveyorBelt cvb =  player.getSpace().getConveyorBelt();
+        for(int i = 0; i < cvb.getLevel(); i++){
+            player.setSpace(board.getNeighbour(player.getSpace(), cvb.getHeading()));
+        }
+    }
+
+    public void robotPushNeighbourRobot(Player player){
         Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
         if(neighbourSpace.getPlayer() != null){
             neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));

@@ -38,7 +38,7 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
-
+    public ConveyorBelt cvb = null;
     private Player player;
 
     public Space(Board board, int x, int y) {
@@ -67,6 +67,13 @@ public class Space extends Subject {
             notifyChange();
         }
     }
+
+    public void setConveyorBelt(int level, Heading heading){cvb = new ConveyorBelt(level, heading);}
+
+    public ConveyorBelt getConveyorBelt(){return cvb;}
+
+
+
     public boolean hasWallAtHeading(Heading heading){
         int x = player.getSpace().x;
         int y = player.getSpace().y;
