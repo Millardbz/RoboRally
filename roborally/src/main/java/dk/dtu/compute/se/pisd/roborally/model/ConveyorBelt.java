@@ -10,6 +10,5 @@ public class ConveyorBelt {
         this.heading = heading;
     }
     public int getLevel(){return level;}
-
     public Heading getHeading() {return heading;}
 }

@@ -38,7 +38,8 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
-    public ConveyorBelt cvb = null;
+    private ConveyorBelt cvb = null;
+    public boolean hasLaser;
     private Player player;
 
     public Space(Board board, int x, int y) {
@@ -69,10 +70,9 @@ public class Space extends Subject {
     }
 
     public void setConveyorBelt(int level, Heading heading){cvb = new ConveyorBelt(level, heading);}
-
     public ConveyorBelt getConveyorBelt(){return cvb;}
 
-
+    public void setLaser(){this.hasLaser = true;}
 
     public boolean hasWallAtHeading(Heading heading){
         int x = player.getSpace().x;
@@ -90,24 +90,6 @@ public class Space extends Subject {
                 x == 0 && y == 6 && heading == EAST,   // x - 1
                 x == 6 && y == 2 && heading == SOUTH}; // y - 1
         for (boolean b : wall) {
-            if (b) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasConveyorBeltWithHeading(){
-        int x = player.getSpace().x;
-        int y = player.getSpace().y;
-        boolean[] hasConvayorBelt = new boolean[]{
-                x == 5 && y == 1,
-                x == 5 && y == 2,
-                x == 5 && y == 3,
-                x == 2 && y == 4,
-                x == 2 && y == 5,
-                x == 2 && y == 6};
-        for (boolean b : hasConvayorBelt) {
             if (b) {
                 return true;
             }

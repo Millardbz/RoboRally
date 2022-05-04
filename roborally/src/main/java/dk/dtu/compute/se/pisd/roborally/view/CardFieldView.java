@@ -116,6 +116,8 @@ public class CardFieldView extends GridPane implements ViewObserver {
                     return "C," + i;
                 }
             }
+
+            //DamageCardField
         }
         return null;
 

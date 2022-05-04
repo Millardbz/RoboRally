@@ -22,17 +22,13 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,7 +133,7 @@ public class SpaceView extends StackPane implements ViewObserver {
                         gc.setLineCap(StrokeLineCap.ROUND);
                         gc.strokeLine(2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
                     }
-                    case 3 -> {//WEST
+                    case 3 -> { //WEST
                         gc.setStroke(Color.RED);
                         gc.setLineWidth(5);
                         gc.setLineCap(StrokeLineCap.ROUND);
@@ -153,15 +149,15 @@ public class SpaceView extends StackPane implements ViewObserver {
         Canvas canvas = new Canvas(SPACE_WIDTH, SPACE_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        boolean[] hasConvayorBelt = new boolean[]{
+        boolean[] hasConveyorBelt = new boolean[]{
                 space.x == 5 && space.y == 1,
                 space.x == 5 && space.y == 2,
                 space.x == 5 && space.y == 3,
                 space.x == 2 && space.y == 4,
                 space.x == 2 && space.y == 5,
                 space.x == 2 && space.y == 6};
-        for(int i = 0; i < hasConvayorBelt.length; i++){
-            if(hasConvayorBelt[i]){
+        for(int i = 0; i < hasConveyorBelt.length; i++){
+            if(hasConveyorBelt[i]){
                 gc.setStroke(Color.BLUE);
                 gc.setLineWidth(5);
                 gc.setLineCap(StrokeLineCap.ROUND);
@@ -181,6 +177,28 @@ public class SpaceView extends StackPane implements ViewObserver {
             }
         }
 
+        if(space.hasLaser){
+
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(5);
+            gc.setLineCap(StrokeLineCap.ROUND);
+            gc.strokeLine(30, 30, 30, 2);
+
+            Polygon arrow = new Polygon(0, 0,
+                    5, 10,
+                    10, 0 );
+            try {
+                arrow.setFill(Color.RED);
+            } catch (Exception e) {
+                arrow.setFill(Color.MEDIUMPURPLE);
+            }
+            // arrow.setRotate((90*Heading.WEST.ordinal())%360);
+            this.getChildren().add(arrow);
+            this.getChildren().add(canvas);
+        }
+
+
 
     }
+
 }

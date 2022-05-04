@@ -148,9 +148,12 @@ public class GameController {
 
     private void executeNextStep() {
         conveyorBelts();
+        lasers();
         Player currentPlayer = board.getCurrentPlayer();
         if(currentPlayer.getSpace().getConveyorBelt() != null) {
             conveyorBeltMovePlayer(currentPlayer);
+        } else if (currentPlayer.getSpace().hasLaser){
+            damageFromLaser(currentPlayer);
         }
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
@@ -190,9 +193,6 @@ public class GameController {
     // XXX: V2
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
-            // XXX This is a very simplistic way of dealing with some basic cards and
-            //     their execution. This should eventually be done in a more elegant way
-            //     (this concerns the way cards are modelled as well as the way they are executed).
 
             switch (command) {
                 case FORWARD -> this.moveForward(player);
@@ -245,7 +245,9 @@ public class GameController {
             if(player.getSpace().hasWallAtHeading(player.getHeading())){
                 return;
             }else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){ //check if there is a player in front of current player and then pushes
-                robotPushNeighbourRobot(player);
+                pushNeighbourRobot(player);
+            } else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){
+                return;
             }
             //Determines the direction to move depending on player's heading.
             switch (player.getHeading()) {
@@ -292,11 +294,23 @@ public class GameController {
         }
     }
 
-    public void robotPushNeighbourRobot(Player player){
+    public void pushNeighbourRobot(Player player){
         Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
         if(neighbourSpace.getPlayer() != null){
             neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));
         }
     }
+
+
+    void lasers(){
+        board.getSpace(7,5).setLaser();
+        board.getSpace(6,5).setLaser();
+        board.getSpace(5,5).setLaser();
+    }
+
+    public void damageFromLaser(Player player){
+
+    }
+
 
 }

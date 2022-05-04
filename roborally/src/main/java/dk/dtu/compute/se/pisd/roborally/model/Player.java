@@ -47,6 +47,8 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
+
+    private DamageCardField[] damageCards;
     /**
      * contructor for each player object.
      *
@@ -75,6 +77,9 @@ public class Player extends Subject {
         for (int i = 0; i < cards.length; i++) {
             cards[i] = new CommandCardField(this);
         }
+
+        damageCards = new DamageCardField[1];
+        damageCards[0] = new DamageCardField(this);
     }
 
     public String getName() {
@@ -143,6 +148,8 @@ public class Player extends Subject {
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
+
+    public DamageCardField getDamageCardField(int i){return damageCards[i];}
 
 
 }
