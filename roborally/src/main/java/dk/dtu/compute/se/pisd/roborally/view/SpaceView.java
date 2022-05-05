@@ -171,31 +171,25 @@ public class SpaceView extends StackPane implements ViewObserver {
                 } catch (Exception e) {
                     arrow.setFill(Color.MEDIUMPURPLE);
                 }
-               // arrow.setRotate((90*Heading.WEST.ordinal())%360);
                 this.getChildren().add(arrow);
                 this.getChildren().add(canvas);
             }
         }
 
-        if(space.hasLaser){
+        boolean[] hasLaser = new boolean[]{space.x == 5 && space.y == 5,
+                                           space.x == 6 && space.y == 5,
+                                           space.x == 7 && space.y == 5};
+        for(int i = 0; i < hasLaser.length; i++){
+            if(hasLaser[i]){
+                gc.setStroke(Color.RED);
+                gc.setLineWidth(2);
+                gc.setLineCap(StrokeLineCap.ROUND);
+                gc.strokeLine(0, 30, SPACE_WIDTH, 30);
 
-            gc.setStroke(Color.RED);
-            gc.setLineWidth(5);
-            gc.setLineCap(StrokeLineCap.ROUND);
-            gc.strokeLine(30, 30, 30, 2);
-
-            Polygon arrow = new Polygon(0, 0,
-                    5, 10,
-                    10, 0 );
-            try {
-                arrow.setFill(Color.RED);
-            } catch (Exception e) {
-                arrow.setFill(Color.MEDIUMPURPLE);
+                this.getChildren().add(canvas);
             }
-            // arrow.setRotate((90*Heading.WEST.ordinal())%360);
-            this.getChildren().add(arrow);
-            this.getChildren().add(canvas);
         }
+
 
 
 

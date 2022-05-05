@@ -72,7 +72,7 @@ public class Space extends Subject {
     public void setConveyorBelt(int level, Heading heading){cvb = new ConveyorBelt(level, heading);}
     public ConveyorBelt getConveyorBelt(){return cvb;}
 
-    public void setLaser(){this.hasLaser = true;}
+    public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
 
     public boolean hasWallAtHeading(Heading heading){
         int x = player.getSpace().x;

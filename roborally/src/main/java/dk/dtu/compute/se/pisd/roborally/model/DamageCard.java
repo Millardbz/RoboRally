@@ -4,10 +4,16 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 public class DamageCard extends Subject {
 
-    public final Damage damageType;
+    private final Damage damage;
+    private int amount = 0;
 
-    public DamageCard(Damage damageType){
-        this.damageType = damageType;
+    public DamageCard(Damage damage){
+        this.damage = damage;
     }
-    public String getDamageType() {return damageType.displayName;}
+
+    public Damage getDamage(){return damage;}
+
+    public void updateAmount(){amount++;}
+
+    public int getAmount(){return amount;}
 }

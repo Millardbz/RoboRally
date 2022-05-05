@@ -68,6 +68,8 @@ public class GameController {
                     field.setCard(generateRandomCommandCard());
                     field.setVisible(true);
                 }
+                DamageCardField damageField = player.getDamageCardField(0);
+                damageField.setCard(new DamageCard(Damage.SPAM));
             }
         }
     }
@@ -138,6 +140,7 @@ public class GameController {
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
+
     }
 
     private void continuePrograms() {
@@ -303,13 +306,13 @@ public class GameController {
 
 
     void lasers(){
-        board.getSpace(7,5).setLaser();
-        board.getSpace(6,5).setLaser();
-        board.getSpace(5,5).setLaser();
+        board.getSpace(7,5).setLaser(true);
+        board.getSpace(6,5).setLaser(true);
+        board.getSpace(5,5).setLaser(true);
     }
 
     public void damageFromLaser(Player player){
-
+        player.getDamageCardField(0).getCard().updateAmount();
     }
 
 

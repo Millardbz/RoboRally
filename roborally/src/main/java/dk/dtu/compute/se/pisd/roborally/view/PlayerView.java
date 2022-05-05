@@ -23,7 +23,10 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,8 +34,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /**
  * ...
@@ -50,6 +51,7 @@ public class PlayerView extends Tab implements ViewObserver {
     private GridPane programPane;
     private Label cardsLabel;
     private GridPane cardsPane;
+    private Label damageLabel;
 
     private CardFieldView[] programCardViews;
     private CardFieldView[] cardViews;
@@ -122,7 +124,10 @@ public class PlayerView extends Tab implements ViewObserver {
                 cardsPane.add(cardViews[i], i, 0);
             }
         }
+        damageLabel = new Label("Number of SPAM cards: " + player.getDamageCardField(0).getCard().getAmount());
+        damageLabel.setAlignment(Pos.BASELINE_RIGHT);
 
+        top.getChildren().add(damageLabel);
         top.getChildren().add(programLabel);
         top.getChildren().add(programPane);
         top.getChildren().add(cardsLabel);
@@ -210,6 +215,9 @@ public class PlayerView extends Tab implements ViewObserver {
 
             }
         }
+
+
+
     }
 
 }
