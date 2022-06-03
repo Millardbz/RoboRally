@@ -38,7 +38,7 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
-    private ConveyorBelt cvb = null;
+    String conveyorBelt = null;
     public boolean hasLaser;
     private Player player;
 
@@ -68,9 +68,11 @@ public class Space extends Subject {
             notifyChange();
         }
     }
+    public void setConveyorBelt1(String lvlHeading){
+        conveyorBelt = lvlHeading;
+    }
 
-    public void setConveyorBelt(int level, Heading heading){cvb = new ConveyorBelt(level, heading);}
-    public ConveyorBelt getConveyorBelt(){return cvb;}
+    public String getConveyorBelt1(){return conveyorBelt;}
 
     public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
 

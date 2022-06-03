@@ -153,7 +153,7 @@ public class GameController {
         conveyorBelts();
         lasers();
         Player currentPlayer = board.getCurrentPlayer();
-        if(currentPlayer.getSpace().getConveyorBelt() != null) {
+        if(currentPlayer.getSpace().getConveyorBelt1() != null) {
             conveyorBeltMovePlayer(currentPlayer);
         } else if (currentPlayer.getSpace().hasLaser){
             damageFromLaser(currentPlayer);
@@ -282,18 +282,36 @@ public class GameController {
     }
 
     void conveyorBelts(){
-        board.getSpace(5, 1).setConveyorBelt(1, Heading.SOUTH);
-        board.getSpace(5, 2).setConveyorBelt(1, Heading.SOUTH);
-        board.getSpace(5, 3).setConveyorBelt(1, Heading.SOUTH);
-        board.getSpace(2, 4).setConveyorBelt(1, Heading.SOUTH);
-        board.getSpace(2, 5).setConveyorBelt(1, Heading.SOUTH);
-        board.getSpace(2, 6).setConveyorBelt(1, Heading.SOUTH);
+        board.getSpace(5, 1).setConveyorBelt1("1S");
+        board.getSpace(5, 2).setConveyorBelt1("1S");
+        board.getSpace(5, 3).setConveyorBelt1("1S");
+        board.getSpace(2, 4).setConveyorBelt1("1S");
+        board.getSpace(2, 5).setConveyorBelt1("1S");
+        board.getSpace(2, 6).setConveyorBelt1("1S");
     }
 
     public void conveyorBeltMovePlayer(Player player){
-        ConveyorBelt cvb =  player.getSpace().getConveyorBelt();
-        for(int i = 0; i < cvb.getLevel(); i++){
-            player.setSpace(board.getNeighbour(player.getSpace(), cvb.getHeading()));
+        String cvb = player.getSpace().getConveyorBelt1();
+        int level = 0;
+        Heading heading = null;
+        switch (cvb.charAt(0)){
+            case '1' -> level = 1;
+            case '2' -> level = 2;
+            case '3' -> level = 3;
+        }
+        switch (cvb.charAt(1)){
+            case 'N' -> heading = Heading.NORTH;
+            case 'S' -> heading = Heading.SOUTH;
+            case 'E' -> heading = Heading.EAST;
+            case 'W' -> heading = Heading.WEST;
+        }
+        if(heading != null){
+            for(int i = 0; i < level; i++){
+                player.setSpace(board.getNeighbour(player.getSpace(), heading));
+            }
+        }else{
+            System.out.println("Heading cannot be null!" + "\n" +
+                    "Must be the first character of a heading");
         }
     }
 
