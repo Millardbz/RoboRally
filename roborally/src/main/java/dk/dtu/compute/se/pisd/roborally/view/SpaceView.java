@@ -156,8 +156,8 @@ public class SpaceView extends StackPane implements ViewObserver {
                 space.x == 2 && space.y == 4,
                 space.x == 2 && space.y == 5,
                 space.x == 2 && space.y == 6};
-        for(int i = 0; i < hasConveyorBelt.length; i++){
-            if(hasConveyorBelt[i]){
+       // for(int i = 0; i < hasConveyorBelt.length; i++){
+            if(space.getConveyorBelt() != null){
                 gc.setStroke(Color.BLUE);
                 gc.setLineWidth(5);
                 gc.setLineCap(StrokeLineCap.ROUND);
@@ -174,7 +174,7 @@ public class SpaceView extends StackPane implements ViewObserver {
                 this.getChildren().add(arrow);
                 this.getChildren().add(canvas);
             }
-        }
+       // }
 
         boolean[] hasLaser = new boolean[]{space.x == 5 && space.y == 5,
                                            space.x == 6 && space.y == 5,

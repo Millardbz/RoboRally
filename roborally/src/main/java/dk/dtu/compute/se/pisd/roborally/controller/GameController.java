@@ -38,17 +38,6 @@ public class GameController {
         this.board = board;
     }
 
-    /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted!
-     *
-     * @param space the space to which the current player should move
-     */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-
-
-    }
-
     // XXX: V2
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
@@ -153,7 +142,7 @@ public class GameController {
         conveyorBelts();
         lasers();
         Player currentPlayer = board.getCurrentPlayer();
-        if(currentPlayer.getSpace().getConveyorBelt1() != null) {
+        if(currentPlayer.getSpace().getConveyorBelt() != null) {
             conveyorBeltMovePlayer(currentPlayer);
         } else if (currentPlayer.getSpace().hasLaser){
             damageFromLaser(currentPlayer);
@@ -281,29 +270,38 @@ public class GameController {
         }
     }
 
+    /**
+     *
+     */
     void conveyorBelts(){
-        board.getSpace(5, 1).setConveyorBelt1("1S");
-        board.getSpace(5, 2).setConveyorBelt1("1S");
-        board.getSpace(5, 3).setConveyorBelt1("1S");
-        board.getSpace(2, 4).setConveyorBelt1("1S");
-        board.getSpace(2, 5).setConveyorBelt1("1S");
-        board.getSpace(2, 6).setConveyorBelt1("1S");
+        board.getSpace(5, 1).setConveyorBelt("1S");
+        board.getSpace(5, 2).setConveyorBelt("1S");
+        board.getSpace(5, 3).setConveyorBelt("1S");
+        board.getSpace(2, 4).setConveyorBelt("1S");
+        board.getSpace(2, 5).setConveyorBelt("1S");
+        board.getSpace(2, 6).setConveyorBelt("1S");
     }
 
+    /**
+     *
+     * @param player
+     */
     public void conveyorBeltMovePlayer(Player player){
-        String cvb = player.getSpace().getConveyorBelt1();
+        String cvb = player.getSpace().getConveyorBelt();
         int level = 0;
         Heading heading = null;
         switch (cvb.charAt(0)){
             case '1' -> level = 1;
             case '2' -> level = 2;
             case '3' -> level = 3;
+            default -> System.out.println("Character for level is invalid.");
         }
         switch (cvb.charAt(1)){
             case 'N' -> heading = Heading.NORTH;
             case 'S' -> heading = Heading.SOUTH;
             case 'E' -> heading = Heading.EAST;
             case 'W' -> heading = Heading.WEST;
+            default -> System.out.println("Character for heading is invalid.");
         }
         if(heading != null){
             for(int i = 0; i < level; i++){
@@ -333,5 +331,9 @@ public class GameController {
         player.getDamageCardField(0).getCard().updateAmount();
     }
 
+
+    public void moveCurrentPlayerToSpace(Space space) {
+
+    }
 
 }

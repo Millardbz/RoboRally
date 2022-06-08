@@ -23,12 +23,10 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-
+import dk.dtu.compute.se.pisd.roborally.fileaccess.LoadBoard;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -106,7 +104,7 @@ public class AppController implements Observer {
      * game.
      */
     public void saveGame() {
-        // XXX needs to be implemented eventually
+        LoadBoard.saveBoard(gameController.board, "board2");
     }
     /**
      * For now, this method is not finished. This should load an unfinished game, that has previously
