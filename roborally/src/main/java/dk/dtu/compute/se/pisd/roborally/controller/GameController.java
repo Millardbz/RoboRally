@@ -238,6 +238,8 @@ public class GameController {
                 return;
             }else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){ //check if there is a player in front of current player and then pushes
                 pushNeighbourRobot(player);
+            } else if(board.getNeighbour(player.getSpace(), player.getHeading()) != null){
+                return;
             }
             //Determines the direction to move depending on player's heading.
             switch (player.getHeading()) {
@@ -292,7 +294,7 @@ public class GameController {
             case '1' -> level = 1;
             case '2' -> level = 2;
             case '3' -> level = 3;
-            default -> System.out.println("Number for level is invalid.");
+            default -> System.out.println("Character for level is invalid.");
         }
         switch (cvb.charAt(1)){
             case 'N' -> heading = Heading.NORTH;

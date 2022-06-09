@@ -19,34 +19,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.controller;
+package dk.dtu.compute.se.pisd.roborally.model.database;
 
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+
+import java.util.List;
 
 /**
- * ...
+ * .This is an interface to determine how a repository should look
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class ConveyorBelt extends FieldAction {
-
-    private Heading heading;
-
-    public Heading getHeading() {
-        return heading;
-    }
-
-    public void setHeading(Heading heading) {
-        this.heading = heading;
-    }
-
-    @Override
-    public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO needs to be implemented
-        return false;
-    }
+public interface IRepository {
+	
+ 	boolean createGameInDB(Board game);
+	
+	boolean updateGameInDB(Board game);
+	
+	Board loadGameFromDB(int id);
+	
+	List<GameInDB> getGames();
 
 }

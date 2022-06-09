@@ -19,24 +19,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.fileaccess.model;
-
-import java.util.ArrayList;
-import java.util.List;
-
+package dk.dtu.compute.se.pisd.roborally.model.database;
 
 /**
- * ...
+ * This model is used to show a game that exists in the database
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
-public class BoardTemplate {
+public class GameInDB {
 
-    public int width;
-    public int height;
-    public String name;
+    public final int id;
+    public final String name;
 
-    public List<SpaceTemplate> spaces = new ArrayList<>();
+    public GameInDB(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return id + ": " + name;
+    }
 
 }
