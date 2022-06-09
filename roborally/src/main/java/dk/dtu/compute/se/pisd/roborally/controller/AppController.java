@@ -32,8 +32,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -47,6 +50,8 @@ public class AppController implements Observer {
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
     final private List<String> BOARD_SIZES = Arrays.asList("Small","Medium","Large");
+
+    private List<String> BOARDS = null;
 
     final private RoboRally roboRally;
 
@@ -129,7 +134,6 @@ public class AppController implements Observer {
      */
     public void saveGame() {
         LoadBoard.saveBoard(gameController.board, gameController.board.boardName);
-
     }
     /**
      * For now, this method is not finished. This should load an unfinished game, that has previously
@@ -137,9 +141,21 @@ public class AppController implements Observer {
      * gameController object has been instantiated.
      */
     public void loadGame() {
-        if (gameController == null) {
-            newGame();
-        }
+
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            URL url = loader.getResource("boards");
+            if(url != null){
+                BOARDS = Arrays.asList(Objects.requireNonNull(new File(url.getPath()).list()));
+            }
+            else{
+                System.out.println("Invalid URL");
+            }
+            ChoiceDialog<String> chosenSave = new ChoiceDialog<>(BOARDS.get(0), BOARDS);
+            chosenSave.setTitle("Choose save:");
+            chosenSave.showAndWait();
+
+            LoadBoard.loadBoard(chosenSave.getResult());
+
     }
 
     /**

@@ -40,8 +40,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-    final public static int SPACE_HEIGHT = 60; // 60; // 75;
-    final public static int SPACE_WIDTH = 60;  // 60; // 75;
+    final public static int SPACE_HEIGHT = 40; // 60; // 75;
+    final public static int SPACE_WIDTH = 40;  // 60; // 75;
 
     public final Space space;
 
@@ -159,9 +159,9 @@ public class SpaceView extends StackPane implements ViewObserver {
        // for(int i = 0; i < hasConveyorBelt.length; i++){
             if(space.getConveyorBelt() != null){
                 gc.setStroke(Color.BLUE);
-                gc.setLineWidth(5);
+                gc.setLineWidth(3);
                 gc.setLineCap(StrokeLineCap.ROUND);
-                gc.strokeLine(30, 30, 30, 2);
+                gc.strokeLine(20, 20, 20, 2);
 
                 Polygon arrow = new Polygon(0, 0,
                         5, 10,
@@ -175,23 +175,6 @@ public class SpaceView extends StackPane implements ViewObserver {
                 this.getChildren().add(canvas);
             }
        // }
-
-        boolean[] hasLaser = new boolean[]{space.x == 5 && space.y == 5,
-                                           space.x == 6 && space.y == 5,
-                                           space.x == 7 && space.y == 5};
-        for(int i = 0; i < hasLaser.length; i++){
-            if(hasLaser[i]){
-                gc.setStroke(Color.RED);
-                gc.setLineWidth(2);
-                gc.setLineCap(StrokeLineCap.ROUND);
-                gc.strokeLine(0, 30, SPACE_WIDTH, 30);
-
-                this.getChildren().add(canvas);
-            }
-        }
-
-
-
 
     }
 
