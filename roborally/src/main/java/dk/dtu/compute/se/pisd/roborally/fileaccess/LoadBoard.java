@@ -100,6 +100,7 @@ public class LoadBoard {
         BoardTemplate template = new BoardTemplate();
         template.width = board.width;
         template.height = board.height;
+        template.name = name;
 
         for (int i=0; i<board.width; i++) {
             for (int j=0; j<board.height; j++) {

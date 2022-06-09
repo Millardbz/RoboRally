@@ -28,10 +28,8 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.LoadBoard;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -48,10 +46,13 @@ public class AppController implements Observer {
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
+    final private List<String> BOARD_SIZES = Arrays.asList("Small","Medium","Large");
 
     final private RoboRally roboRally;
 
     private GameController gameController;
+
+
 
     /**
      * This method instantiates a roboRally game object
@@ -67,12 +68,19 @@ public class AppController implements Observer {
      * and the players will be added to the board.
      */
     public void newGame() {
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        dialog.setTitle("Player number");
-        dialog.setHeaderText("Select number of players");
-        Optional<Integer> result = dialog.showAndWait();
+        ChoiceDialog<Integer> dialogPlayerAmount = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        dialogPlayerAmount.setTitle("Player number");
+        dialogPlayerAmount.setHeaderText("Select number of players");
+        Optional<Integer> playerAmount = dialogPlayerAmount.showAndWait();
 
-        if (result.isPresent()) {
+        ChoiceDialog<String> dialogBoardSize = new ChoiceDialog<>(BOARD_SIZES.get(0), BOARD_SIZES);
+        dialogBoardSize.setTitle("Board Size");
+        Optional<String> boardSize = dialogBoardSize.showAndWait();
+
+        TextInputDialog dialogBoardName = new TextInputDialog("Enter Board Name");
+        dialogBoardName.showAndWait();
+
+        if (playerAmount.isPresent()) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
                 // give the user the option to save the game or abort this operation!
@@ -80,12 +88,28 @@ public class AppController implements Observer {
                     return;
                 }
             }
+            int w = 0, h = 0;
+            switch (boardSize.get()){
+                case "Small" -> {
+                    w = 8;
+                    h = 8;
+                }
+                case "Medium" -> {
+                    w = 12;
+                    h = 8;
+                }
+                case "Large" -> {
+                    w = 16;
+                    h = 8;
+                }
 
+            }
             // XXX the board should eventually be created programmatically or loaded from a file
             // here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+
+            Board board = new Board(w,h,dialogBoardName.getResult());
             gameController = new GameController(board);
-            int no = result.get();
+            int no = playerAmount.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);
@@ -104,7 +128,8 @@ public class AppController implements Observer {
      * game.
      */
     public void saveGame() {
-        LoadBoard.saveBoard(gameController.board, "board2");
+        LoadBoard.saveBoard(gameController.board, gameController.board.boardName);
+
     }
     /**
      * For now, this method is not finished. This should load an unfinished game, that has previously
@@ -112,8 +137,6 @@ public class AppController implements Observer {
      * gameController object has been instantiated.
      */
     public void loadGame() {
-        // XXX needs to be implememted eventually
-        // for now, we just create a new game
         if (gameController == null) {
             newGame();
         }
