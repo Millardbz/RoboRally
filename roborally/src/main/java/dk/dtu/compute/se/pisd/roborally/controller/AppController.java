@@ -155,7 +155,6 @@ public class AppController implements Observer {
             chosenSave.showAndWait();
 
             LoadBoard.loadBoard(chosenSave.getResult());
-
     }
 
     /**
