@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
  * ...
@@ -49,6 +48,12 @@ public class Space extends Subject {
     private final List<Heading> walls = new ArrayList<>();
     private final List<FieldAction> actions = new ArrayList<>();
 
+    /**
+     * Space constructor.
+     * @param board
+     * @param x
+     * @param y
+     */
     public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
@@ -76,12 +81,21 @@ public class Space extends Subject {
         }
     }
 
+    /**
+     * set conveyor belt with a string containing level and first letter of a heading
+     * @param lvlHeading
+     */
     public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
 
     public String getConveyorBelt(){return conveyorBelt;}
 
     public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
 
+    /**
+     * Determines the spaces that have a wall and what heading
+     * @param heading
+     * @return
+     */
     public boolean hasWallAtHeading(Heading heading){
         int x = player.getSpace().x;
         int y = player.getSpace().y;

@@ -82,7 +82,8 @@ public class AppController implements Observer {
         dialogBoardSize.setTitle("Board Size");
         Optional<String> boardSize = dialogBoardSize.showAndWait();
 
-        TextInputDialog dialogBoardName = new TextInputDialog("Enter Board Name");
+        TextInputDialog dialogBoardName = new TextInputDialog();
+        dialogBoardName.setTitle("Board Name");
         dialogBoardName.showAndWait();
 
         if (playerAmount.isPresent()) {
@@ -129,16 +130,14 @@ public class AppController implements Observer {
         }
     }
     /**
-     * For now, this is an empty method, but this method should enable the user to same an unfinished
-     * game.
+     * Save current game.
      */
     public void saveGame() {
         LoadBoard.saveBoard(gameController.board, gameController.board.boardName);
     }
+
     /**
-     * For now, this method is not finished. This should load an unfinished game, that has previously
-     * been saved. Right now, this functions invokes the new game function, as long as a
-     * gameController object has been instantiated.
+     * Load saved game.
      */
     public void loadGame() {
 

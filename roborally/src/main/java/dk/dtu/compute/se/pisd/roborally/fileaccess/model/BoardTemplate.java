@@ -37,6 +37,8 @@ public class BoardTemplate {
     public int height;
     public String name;
 
+
+    public List<PlayerTemplate> players;
     public List<SpaceTemplate> spaces = new ArrayList<>();
 
 }

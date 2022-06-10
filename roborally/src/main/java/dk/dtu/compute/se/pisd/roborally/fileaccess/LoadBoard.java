@@ -25,13 +25,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.model.PlayerTemplate;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Objects;
 
 /**
@@ -45,6 +50,11 @@ public class LoadBoard {
     private static final String DEFAULTBOARD = "defaultboard";
     private static final String JSON_EXT = "json";
 
+    /**
+     * Loads a board from a json file located in resources.
+     * @param boardname
+     * @return
+     */
     public static Board loadBoard(String boardname) {
         if (boardname == null) {
             boardname = DEFAULTBOARD;
@@ -95,11 +105,26 @@ public class LoadBoard {
         return result;
     }
 
+    /**
+     * Saves the board to a json file located in resources.
+     * @param board
+     * @param name
+     */
     public static void saveBoard(Board board, String name) {
         BoardTemplate template = new BoardTemplate();
         template.width = board.width;
         template.height = board.height;
         template.name = board.boardName;
+        for(int i = 0; i < board.getPlayersNumber(); i++){
+            PlayerTemplate playerTemplate = new PlayerTemplate();
+            Player player = board.getPlayer(i);
+            playerTemplate.board = board;
+            playerTemplate.space = player.getSpace();
+            playerTemplate.name = player.getName();
+            playerTemplate.heading = player.getHeading();
+            playerTemplate.color = player.getColor();
+            template.players.add(playerTemplate);
+        }
 
         for (int i=0; i<board.width; i++) {
             for (int j=0; j<board.height; j++) {
@@ -110,7 +135,6 @@ public class LoadBoard {
                     spaceTemplate.y = space.y;
                     spaceTemplate.actions.addAll(space.getActions());
                     spaceTemplate.walls.addAll(space.getWalls());
-                    spaceTemplate.player = space.getPlayer();
                     template.spaces.add(spaceTemplate);
                 }
             }

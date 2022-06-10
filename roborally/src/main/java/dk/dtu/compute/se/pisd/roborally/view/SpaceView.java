@@ -143,7 +143,6 @@ public class SpaceView extends StackPane implements ViewObserver {
                 this.getChildren().add(canvas);
 
             }
-            k++;
         }
 
         Canvas canvas = new Canvas(SPACE_WIDTH, SPACE_HEIGHT);
@@ -156,8 +155,8 @@ public class SpaceView extends StackPane implements ViewObserver {
                 space.x == 2 && space.y == 4,
                 space.x == 2 && space.y == 5,
                 space.x == 2 && space.y == 6};
-       // for(int i = 0; i < hasConveyorBelt.length; i++){
-            if(space.getConveyorBelt() != null){
+        for (boolean b : hasConveyorBelt) {
+            if (b) {
                 gc.setStroke(Color.BLUE);
                 gc.setLineWidth(3);
                 gc.setLineCap(StrokeLineCap.ROUND);
@@ -165,7 +164,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 
                 Polygon arrow = new Polygon(0, 0,
                         5, 10,
-                        10, 0 );
+                        10, 0);
                 try {
                     arrow.setFill(Color.BLUE);
                 } catch (Exception e) {
@@ -174,7 +173,7 @@ public class SpaceView extends StackPane implements ViewObserver {
                 this.getChildren().add(arrow);
                 this.getChildren().add(canvas);
             }
-       // }
+        }
 
     }
 
