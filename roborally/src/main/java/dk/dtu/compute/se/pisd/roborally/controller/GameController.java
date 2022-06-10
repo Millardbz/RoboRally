@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.scene.control.Alert;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,6 +34,8 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    private ConveyorBelt belt;
+    public boolean won = false;
 
     public GameController(@NotNull Board board) {
         this.board = board;
@@ -143,7 +146,7 @@ public class GameController {
         lasers();
         Player currentPlayer = board.getCurrentPlayer();
         if(currentPlayer.getSpace().getConveyorBelt() != null) {
-            conveyorBeltMovePlayer(currentPlayer);
+            belt.doAction(this, currentPlayer.getSpace());
         } else if (currentPlayer.getSpace().hasLaser){
             damageFromLaser(currentPlayer);
         }
@@ -224,9 +227,9 @@ public class GameController {
     }
 
     public void optionLeftRight(Player player){
-      CommandCardField currentCard = player.board.getCurrentPlayer().getCardField(player.board.getStep());
-      currentCard.getCard().command.getOptions().add(Command.LEFT);
-      currentCard.getCard().command.getOptions().add(Command.RIGHT);
+        CommandCardField currentCard = player.board.getCurrentPlayer().getCardField(player.board.getStep());
+        currentCard.getCard().command.getOptions().add(Command.LEFT);
+        currentCard.getCard().command.getOptions().add(Command.RIGHT);
     }
 
     public void moveForward(@NotNull Player player) { //Moves the robot 1 square in player's heading
@@ -286,32 +289,6 @@ public class GameController {
      *
      * @param player
      */
-    public void conveyorBeltMovePlayer(Player player){
-        String cvb = player.getSpace().getConveyorBelt();
-        int level = 0;
-        Heading heading = null;
-        switch (cvb.charAt(0)){
-            case '1' -> level = 1;
-            case '2' -> level = 2;
-            case '3' -> level = 3;
-            default -> System.out.println("Character for level is invalid.");
-        }
-        switch (cvb.charAt(1)){
-            case 'N' -> heading = Heading.NORTH;
-            case 'S' -> heading = Heading.SOUTH;
-            case 'E' -> heading = Heading.EAST;
-            case 'W' -> heading = Heading.WEST;
-            default -> System.out.println("Character for heading is invalid.");
-        }
-        if(heading != null){
-            for(int i = 0; i < level; i++){
-                player.setSpace(board.getNeighbour(player.getSpace(), heading));
-            }
-        }else{
-            System.out.println("Heading cannot be null!" + "\n" +
-                    "Must be the first character of a heading");
-        }
-    }
 
     public void pushNeighbourRobot(Player player){
         Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
@@ -334,6 +311,12 @@ public class GameController {
 
     public void moveCurrentPlayerToSpace(Space space) {
 
+    }
+
+    public void isWinner(Player player) {
+        Alert winMsg = new Alert(Alert.AlertType.INFORMATION, "Spiller \"" + player.getName() + "\" har vundet spillet.");
+        this.won = true;
+        winMsg.showAndWait();
     }
 
 }

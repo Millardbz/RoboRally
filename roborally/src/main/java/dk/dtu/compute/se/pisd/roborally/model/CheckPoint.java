@@ -13,16 +13,16 @@ public class CheckPoint extends FieldAction {
 
     @Override
     public boolean doAction(GameController gameController, Space space) {
-            Player player = space.getPlayer();
-            if (player != null) {
-                // there is actually a player on this space
-                player.setLastCheckpoint(this.no);
-                if (player.getLastCheckpoint() >= gameController.board.getCheckpoints().size()) {
-                    gameController.initiateWin(player);
-                }
-
+        Player player = space.getPlayer();
+        if (player != null) {
+            // there is actually a player on this space
+            player.setLastCheckpoint(this.no);
+            if (player.getLastCheckpoint() >= gameController.board.getCheckpoints().size()) {
+                gameController.isWinner(player);
             }
 
-            return true;
         }
+
+        return true;
     }
+}
