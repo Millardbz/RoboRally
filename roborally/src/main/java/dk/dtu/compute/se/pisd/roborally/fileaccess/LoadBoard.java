@@ -25,18 +25,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.dtu.compute.se.pisd.designpatterns.observer.BoardTemplate;
+import dk.dtu.compute.se.pisd.designpatterns.observer.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.model.PlayerTemplate;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Objects;
 
 /**
@@ -64,8 +59,8 @@ public class LoadBoard {
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
-
-            return new Board(8, 8);
+            new Board(8, 8);
+            return;
         }
 
 		// In simple cases, we can create a Gson object with new Gson():
@@ -73,7 +68,7 @@ public class LoadBoard {
                 registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
 
-		Board result = null;
+		Board result;
 		// FileReader fileReader = null;
         JsonReader reader = null;
 		try {
@@ -102,7 +97,6 @@ public class LoadBoard {
 				} catch (IOException e2) {}
 			}
 		}
-        return result;
     }
 
     /**
@@ -114,17 +108,7 @@ public class LoadBoard {
         BoardTemplate template = new BoardTemplate();
         template.width = board.width;
         template.height = board.height;
-        template.name = board.boardName;
-        for(int i = 0; i < board.getPlayersNumber(); i++){
-            PlayerTemplate playerTemplate = new PlayerTemplate();
-            Player player = board.getPlayer(i);
-            playerTemplate.board = board;
-            playerTemplate.space = player.getSpace();
-            playerTemplate.name = player.getName();
-            playerTemplate.heading = player.getHeading();
-            playerTemplate.color = player.getColor();
-            template.players.add(playerTemplate);
-        }
+        template.name = name;
 
         for (int i=0; i<board.width; i++) {
             for (int j=0; j<board.height; j++) {

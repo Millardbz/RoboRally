@@ -44,9 +44,10 @@ public class Space extends Subject {
     String conveyorBelt = null;
     public boolean hasLaser;
     private Player player;
+    private int startPlayerNo;
 
-    private final List<Heading> walls = new ArrayList<>();
-    private final List<FieldAction> actions = new ArrayList<>();
+    public List<FieldAction> actions = new ArrayList<>();
+    private List<Heading> walls = new ArrayList<>();
 
     /**
      * Space constructor.
@@ -85,9 +86,44 @@ public class Space extends Subject {
      * set conveyor belt with a string containing level and first letter of a heading
      * @param lvlHeading
      */
-    public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
+    public Space getNeighbourSpace(Heading heading) {
+        int newX, newY;
+        switch (heading) {
 
-    public String getConveyorBelt(){return conveyorBelt;}
+            case NORTH:
+                newX = x;
+                newY = (y - 1) % board.height;
+
+                if (newY == -1)
+                    newY = 7;
+
+                break;
+            case SOUTH:
+                newX = x;
+                newY = (y + 1) % board.height;
+                break;
+            case WEST:
+                newX = (x - 1) % board.width;
+
+                if (newX == -1)
+                    newX = 7;
+
+                newY = y;
+                break;
+            case EAST:
+                newX = (x + 1) % board.width;
+                newY = y;
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + heading);
+        }
+
+        return this.board.getSpace(newX, newY);
+
+    }
+
+    public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
 
     public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
 
@@ -119,12 +155,68 @@ public class Space extends Subject {
         return false;
     }
 
+    public List<FieldAction> getActions() {
+        return actions;
+    }
+
+    public ConveyorBelt getConveyorBelt() {
+
+        ConveyorBelt belt = null;
+
+        for (FieldAction action : this.actions) {
+            if (action instanceof ConveyorBelt && belt == null) {
+                belt = (ConveyorBelt) action;
+            }
+        }
+
+        return belt;
+    }
+
+
+    public void addAction(FieldAction action) {
+        this.actions.add(action);
+
+        if (action instanceof CheckPoint) {
+            this.board.setCheckpoints((CheckPoint) action);
+        }
+
+        notifyChange();
+    }
+
     public List<Heading> getWalls() {
         return walls;
     }
 
-    public List<FieldAction> getActions() {
-        return actions;
+    public void addWall(Heading heading) {
+        if ( ! walls.contains(heading)) {
+            walls.add(heading);
+            notifyChange();
+        }
+    }
+
+
+    public void addGear(Direction direction) {
+        boolean check = false;
+
+        for (FieldAction action : actions) {
+            if (action instanceof Gear) {
+                check = true;
+            }
+        }
+
+        if (!check) {
+            this.actions.add(new Gear(direction));
+            notifyChange();
+        }
+    }
+
+    public void setStartPlayerNo(int startPlayerNo) {
+        this.startPlayerNo = startPlayerNo;
+        notifyChange();
+    }
+
+    public int getStartPlayerNo() {
+        return startPlayerNo;
     }
 
     void playerChanged() {

@@ -19,26 +19,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.fileaccess.model;
+package dk.dtu.compute.se.pisd.roborally.model.database;
 
-import java.util.ArrayList;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+
 import java.util.List;
 
-
 /**
- * ...
+ * .This is an interface to determine how a repository should look
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public class BoardTemplate {
-
-    public int width;
-    public int height;
-    public String name;
-
-
-    public List<PlayerTemplate> players;
-    public List<SpaceTemplate> spaces = new ArrayList<>();
+public interface IRepository {
+	
+ 	boolean createGameInDB(Board game);
+	
+	boolean updateGameInDB(Board game);
+	
+	Board loadGameFromDB(int id);
+	
+	List<GameInDB> getGames();
 
 }

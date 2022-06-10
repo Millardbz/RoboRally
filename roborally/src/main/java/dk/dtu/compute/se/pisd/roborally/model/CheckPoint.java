@@ -1,15 +1,28 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
-public class CheckPoint {
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 
-    public final Board board;
+public class CheckPoint extends FieldAction {
 
-    public final int x;
-    public final int y;
+    public final int no;
 
-    public CheckPoint(Board board, int x, int y){
-        this.board = board;
-        this.x = x;
-        this.y = y;
+    public CheckPoint(int no) {
+        this.no = no;
+    }
+
+    @Override
+    public boolean doAction(GameController gameController, Space space) {
+        Player player = space.getPlayer();
+        if (player != null) {
+            // there is actually a player on this space
+            player.setLastCheckpoint(this.no);
+            if (player.getLastCheckpoint() >= gameController.board.getCheckpoints().size()) {
+                gameController.isWinner(player);
+            }
+
+        }
+
+        return true;
     }
 }

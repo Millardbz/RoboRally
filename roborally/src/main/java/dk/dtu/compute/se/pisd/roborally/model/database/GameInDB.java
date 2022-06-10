@@ -19,43 +19,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.controller;
-
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import org.jetbrains.annotations.NotNull;
+package dk.dtu.compute.se.pisd.roborally.model.database;
 
 /**
- * ...
+ * This model is used to show a game that exists in the database
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
-public class ConveyorBelt extends FieldAction {
+public class GameInDB {
 
-    private Heading heading;
+    public final int id;
+    public final String name;
 
-    public Heading getHeading() {
-        return heading;
-    }
-
-    public void setHeading(Heading heading) {
-        this.heading = heading;
+    public GameInDB(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override
-    public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-
-            Player player = space.getPlayer();
-            if(this.heading != null){
-                Space neighbourSpace = gameController.board.getNeighbour(space, this.heading);
-                player.setSpace(neighbourSpace);
-            }
-
-
-
-        return false;
+    public String toString() {
+        return id + ": " + name;
     }
 
 }

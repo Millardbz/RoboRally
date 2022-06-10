@@ -38,10 +38,7 @@ public class GameController {
         this.board = board;
     }
 
-    /**
-     * Starts the programming phase of the game,
-     * by setting the card field visible
-     */
+    // XXX: V2
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -184,7 +181,6 @@ public class GameController {
         }
     }
 
-
     // XXX: V2
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
@@ -197,7 +193,7 @@ public class GameController {
                 case OPTION_LEFT_RIGHT -> this.optionLeftRight(player);
                 default -> {
                 }
-
+                // DO NOTHING (for now)
             }
         }
 
@@ -226,20 +222,12 @@ public class GameController {
         }
     }
 
-    /**
-     * Method to have the option of turning left or right from a card.
-     * @param player
-     */
     public void optionLeftRight(Player player){
       CommandCardField currentCard = player.board.getCurrentPlayer().getCardField(player.board.getStep());
       currentCard.getCard().command.getOptions().add(Command.LEFT);
       currentCard.getCard().command.getOptions().add(Command.RIGHT);
     }
 
-    /**
-     * Move a player one space in player's heading.
-     * @param player
-     */
     public void moveForward(@NotNull Player player) { //Moves the robot 1 square in player's heading
         //A statement that makes sure the space in front of the player is within the boundaries of the board
         if (player != null && player.getSpace().x + 1 < board.width && player.getSpace().y + 1 < board.height ||
@@ -260,24 +248,12 @@ public class GameController {
         }
     }
 
-    /**
-     * Executes moveForward two times to make the player move two spaces in players heading.
-     * @param player
-     */
+    //Moves the robot 2 squares in player's heading
     public void fastForward(@NotNull Player player) {for(int i = 0; i < 2; i++){moveForward(player);}}
 
-    /**
-     * Turns the player 90 degrees right.
-     * @param player
-     */
     public void turnRight(@NotNull Player player) {player.setHeading(player.getHeading().next());}
 
-    /**
-     * Turns the player 90 degrees right.
-     * @param player
-     */
     public void turnLeft(@NotNull Player player) {player.setHeading(player.getHeading().prev());}
-
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
@@ -291,61 +267,53 @@ public class GameController {
         }
     }
 
+    /**
+     *
+     */
+    void conveyorBelts(){
+        board.getSpace(5, 1).setConveyorBelt("1S");
+        board.getSpace(5, 2).setConveyorBelt("1S");
+        board.getSpace(5, 3).setConveyorBelt("1S");
+        board.getSpace(2, 4).setConveyorBelt("1S");
+        board.getSpace(2, 5).setConveyorBelt("1S");
+        board.getSpace(2, 6).setConveyorBelt("1S");
+    }
+
+    /**
+     *
+     * @param player
+     */
+    public void conveyorBeltMovePlayer(Player player){
+        String cvb = player.getSpace().getConveyorBelt();
+        int level = 0;
+        Heading heading = null;
+        switch (cvb.charAt(0)){
+            case '1' -> level = 1;
+            case '2' -> level = 2;
+            case '3' -> level = 3;
+            default -> System.out.println("Number for level is invalid.");
+        }
+        switch (cvb.charAt(1)){
+            case 'N' -> heading = Heading.NORTH;
+            case 'S' -> heading = Heading.SOUTH;
+            case 'E' -> heading = Heading.EAST;
+            case 'W' -> heading = Heading.WEST;
+            default -> System.out.println("Character for heading is invalid.");
+        }
+        if(heading != null){
+            for(int i = 0; i < level; i++){
+                player.setSpace(board.getNeighbour(player.getSpace(), heading));
+            }
+        }else{
+            System.out.println("Heading cannot be null!" + "\n" +
+                    "Must be the first character of a heading");
+        }
+    }
+
     public void pushNeighbourRobot(Player player){
         Space neighbourSpace =  board.getNeighbour(player.getSpace(), player.getHeading());
         if(neighbourSpace.getPlayer() != null){
             neighbourSpace.getPlayer().setSpace(board.getNeighbour(neighbourSpace, player.getHeading()));
-        }
-    }
-
-    private void conveyorBeltMovePlayer(Player player) {
-        int lvl = 0;
-        Heading heading = null;
-        switch (player.getSpace().getConveyorBelt().charAt(0)){
-            case '1' -> lvl = 1;
-            case '2' -> lvl = 2;
-            case '3' -> lvl = 3;
-            default -> System.out.println("Invalid level");
-        }
-        switch(player.getSpace().getConveyorBelt().charAt(1)){
-            case 'N' -> heading = Heading.NORTH;
-            case 'E' -> heading = Heading.EAST;
-            case 'S' -> heading = Heading.SOUTH;
-            case 'W' -> heading = Heading.WEST;
-            default -> System.out.println("Invalid heading");
-        }
-        for(int i = 0; i < lvl; i++){
-            if(heading != null){
-                player.setSpace(board.getNeighbour(player.getSpace(), heading));
-            }
-
-        }
-
-    }
-
-    void addConveyorBelts(){
-        Space[] space = {
-            board.getSpace(5, 1),
-            board.getSpace(5, 2),
-            board.getSpace(5, 3),
-            board.getSpace(2, 4),
-            board.getSpace(2, 5),
-            board.getSpace(2, 6)};
-        for (Space value : space) {
-            value.setConveyorBelt("1S");
-        }
-
-    }
-
-    void addWalls(){
-        Space[] space = {
-            board.getSpace(3,4),
-            board.getSpace(4,5),
-            board.getSpace(1,2),
-            board.getSpace(1,6),
-            board.getSpace(6,3)};
-        for(Space value : space){
-            value.getWalls().add(Heading.SOUTH);
         }
     }
 
