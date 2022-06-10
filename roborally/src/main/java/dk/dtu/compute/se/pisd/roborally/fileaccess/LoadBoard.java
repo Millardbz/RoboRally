@@ -45,7 +45,7 @@ public class LoadBoard {
     private static final String DEFAULTBOARD = "defaultboard";
     private static final String JSON_EXT = "json";
 
-    public static void loadBoard(String boardname) {
+    public static Board loadBoard(String boardname) {
         if (boardname == null) {
             boardname = DEFAULTBOARD;
         }
@@ -54,8 +54,8 @@ public class LoadBoard {
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
-            new Board(8, 8);
-            return;
+
+            return new Board(8, 8);
         }
 
 		// In simple cases, we can create a Gson object with new Gson():
@@ -63,7 +63,7 @@ public class LoadBoard {
                 registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
 
-		Board result;
+		Board result = null;
 		// FileReader fileReader = null;
         JsonReader reader = null;
 		try {
@@ -78,7 +78,6 @@ public class LoadBoard {
                     space.getWalls().addAll(spaceTemplate.walls);
                 }
             }
-
 			reader.close();
         } catch (IOException e1) {
             if (reader != null) {
@@ -93,13 +92,14 @@ public class LoadBoard {
 				} catch (IOException e2) {}
 			}
 		}
+        return result;
     }
 
     public static void saveBoard(Board board, String name) {
         BoardTemplate template = new BoardTemplate();
         template.width = board.width;
         template.height = board.height;
-        template.name = name;
+        template.name = board.boardName;
 
         for (int i=0; i<board.width; i++) {
             for (int j=0; j<board.height; j++) {
@@ -110,6 +110,7 @@ public class LoadBoard {
                     spaceTemplate.y = space.y;
                     spaceTemplate.actions.addAll(space.getActions());
                     spaceTemplate.walls.addAll(space.getWalls());
+                    spaceTemplate.player = space.getPlayer();
                     template.spaces.add(spaceTemplate);
                 }
             }

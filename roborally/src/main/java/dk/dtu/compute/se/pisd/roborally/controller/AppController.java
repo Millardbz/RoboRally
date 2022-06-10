@@ -150,11 +150,13 @@ public class AppController implements Observer {
             else{
                 System.out.println("Invalid URL");
             }
-            ChoiceDialog<String> chosenSave = new ChoiceDialog<>(BOARDS.get(0), BOARDS);
-            chosenSave.setTitle("Choose save:");
-            chosenSave.showAndWait();
+            ChoiceDialog<String> choice = new ChoiceDialog<>(BOARDS.get(0), BOARDS);
+            choice.setTitle("Choose save:");
+            Optional<String> save = choice.showAndWait();
 
-            LoadBoard.loadBoard(chosenSave.getResult());
+            Board board = LoadBoard.loadBoard(save.get());
+            gameController = new GameController(board);
+            roboRally.createBoardView(gameController);
     }
 
     /**
