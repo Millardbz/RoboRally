@@ -59,8 +59,8 @@ public class LoadBoard {
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
-            new Board(8, 8);
-            return;
+
+            return new Board(8, 8);
         }
 
 		// In simple cases, we can create a Gson object with new Gson():
@@ -68,7 +68,7 @@ public class LoadBoard {
                 registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
 
-		Board result;
+		Board result = null;
 		// FileReader fileReader = null;
         JsonReader reader = null;
 		try {
@@ -97,6 +97,7 @@ public class LoadBoard {
 				} catch (IOException e2) {}
 			}
 		}
+        return result;
     }
 
     /**

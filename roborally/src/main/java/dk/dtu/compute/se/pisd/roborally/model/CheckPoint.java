@@ -18,7 +18,7 @@ public class CheckPoint extends FieldAction {
             // there is actually a player on this space
             player.setLastCheckpoint(this.no);
             if (player.getLastCheckpoint() >= gameController.board.getCheckpoints().size()) {
-                gameController.isWinner(player);
+              //  gameController.isWinner(player);
             }
 
         }

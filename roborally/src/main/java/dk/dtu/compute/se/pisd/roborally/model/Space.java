@@ -83,8 +83,9 @@ public class Space extends Subject {
     }
 
     /**
-     * set conveyor belt with a string containing level and first letter of a heading
-     * @param lvlHeading
+     * Get neighbour space based on heading.
+     * @param heading
+     * @return
      */
     public Space getNeighbourSpace(Heading heading) {
         int newX, newY;
@@ -122,7 +123,9 @@ public class Space extends Subject {
         return this.board.getSpace(newX, newY);
 
     }
-
+    /**
+     * set conveyor belt with a string containing level and first letter of a heading
+     */
     public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
 
     public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
@@ -159,17 +162,8 @@ public class Space extends Subject {
         return actions;
     }
 
-    public ConveyorBelt getConveyorBelt() {
-
-        ConveyorBelt belt = null;
-
-        for (FieldAction action : this.actions) {
-            if (action instanceof ConveyorBelt && belt == null) {
-                belt = (ConveyorBelt) action;
-            }
-        }
-
-        return belt;
+    public String getConveyorBelt() {
+        return conveyorBelt;
     }
 
 

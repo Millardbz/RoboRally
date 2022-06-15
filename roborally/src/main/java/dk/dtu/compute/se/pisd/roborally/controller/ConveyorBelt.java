@@ -19,9 +19,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,5 +62,9 @@ public class ConveyorBelt extends FieldAction {
                     action.doAction(gameController, currentPlayer.getSpace());
                 }
             }
+
+        }
+        return false;
+    }
 
 }

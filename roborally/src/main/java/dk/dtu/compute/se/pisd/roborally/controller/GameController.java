@@ -270,7 +270,7 @@ public class GameController {
     /**
      *
      */
-    void conveyorBelts(){
+    void addConveyorBelts(){
         board.getSpace(5, 1).setConveyorBelt("1S");
         board.getSpace(5, 2).setConveyorBelt("1S");
         board.getSpace(5, 3).setConveyorBelt("1S");
@@ -280,7 +280,7 @@ public class GameController {
     }
 
     /**
-     *
+     *Method to move the player with the conveyor belt
      * @param player
      */
     public void conveyorBeltMovePlayer(Player player){
