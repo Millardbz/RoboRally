@@ -22,59 +22,42 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.PriorityAntenna;
 import org.jetbrains.annotations.NotNull;
-import javafx.scene.control.TextInputDialog;
 import java.util.ArrayList;
 import java.util.List;
-
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
-/**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
- */
 public class Board extends Subject {
 
     public final int width;
-
     public final int height;
 
     public final String boardName;
 
-    private Integer gameId;
-
     private final Space[][] spaces;
-
-    private Antenna antenna;
-
-    private final List<Player> players = new ArrayList<>();
-
-    private List<CheckPoint> checkpoints = new ArrayList<CheckPoint>();
-
     private Player current;
+    public Phase phase = INITIALISATION;
 
-    private Phase phase = INITIALISATION;
+    public int step = 0;
+    public boolean stepMode;
+    public boolean gameOver = false;
+    private int numOfCheckPoints;
 
-    private int step = 0;
+    private List<Checkpoint> checkpoints = new ArrayList<Checkpoint>();
+    private List<Player> players = new ArrayList<>();
 
-    private boolean stepMode;
 
-    private int gameID;
-    private String name;
+     // board constructor.
 
-    /**
-     * board constructor.
-     * @param width
-     * @param height
-     * @param boardName
-     */
     public Board(int width, int height, @NotNull String boardName) {
+
         this.boardName = boardName;
         this.width = width;
         this.height = height;
         spaces = new Space[width][height];
+
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
@@ -88,26 +71,8 @@ public class Board extends Subject {
         this(width, height, "defaultboard");
     }
 
-    public Integer getGameId() {
-        return gameId;
-    }
 
-    public void setGameId(int gameId) {
-        if (this.gameId == null) {
-            this.gameId = gameId;
-        } else {
-            if (!this.gameId.equals(gameId)) {
-                throw new IllegalStateException("A game with a set id may not be assigned a new id!");
-            }
-        }
-    }
-
-    /**
-     * Get a specific space
-     * @param x
-     * @param y
-     * @return
-     */
+     // Get a specific space
     public Space getSpace(int x, int y) {
         if (x >= 0 && x < width &&
                 y >= 0 && y < height) {
@@ -116,29 +81,23 @@ public class Board extends Subject {
             return null;
         }
     }
-    /**
-     * loads the number of players the game.
-     * @return the size of the length of players in the array of player objects
-     */
+
     public int getPlayersNumber() {
         return players.size();
     }
-    /**
-     * this loads each player of the game onto the game board itself
-     * @param player
-     */
+
+
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
             players.add(player);
             notifyChange();
         }
     }
-    /**
-     * your usual get method for each player. as any get-method is a reference for the system to
-     * interact with each player.
-     * @param i
-     * @return
-     */
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+
     public Player getPlayer(int i) {
         if (i >= 0 && i < players.size()) {
             return players.get(i);
@@ -146,20 +105,14 @@ public class Board extends Subject {
             return null;
         }
     }
-    /**
-     * This is a reference, that makes sure that the game system can reach the player that
-     * has the turn of the game.
-     * @return
-     */
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public Player getCurrentPlayer() {
         return current;
     }
-    /**
-     * This is a reference, that makes sure that the game system register the game, that the player
-     * who has the turn is making.
-     *
-     * @return Player
-     */
+
     public void setCurrentPlayer(Player player) {
         if (player != this.current && players.contains(player)) {
             this.current = player;
@@ -167,47 +120,15 @@ public class Board extends Subject {
         }
     }
 
-    public List<CheckPoint> getCheckpoints() {
-        return this.checkpoints;
-    }
-
-    public void setCheckpoints(CheckPoint checkpoint) {
-        this.checkpoints.add(checkpoint);
-    }
-    /**
-     * registers which phase the game is currently in.
-     * @return phase
-     */
     public Phase getPhase() {
         return phase;
     }
-    /**
-     * registers which phase the game is going to be in.
-     * @return phase
-     */
+
     public void setPhase(Phase phase) {
         if (phase != this.phase) {
             this.phase = phase;
             notifyChange();
         }
-    }
-
-    public Antenna getAntenna() {
-        return this.antenna;
-    }
-
-    public void setAntenna(Antenna antenna) {
-        this.antenna = antenna;
-        for (Space[] spaces : this.spaces) {
-            for (Space space : spaces) {
-                // Very hack, we just need to trigger an update on all spaces.
-                space.playerChanged();
-            }
-        }
-    }
-
-    public Space[][] getSpaces() {
-        return spaces;
     }
 
     public int getStep() {
@@ -242,26 +163,20 @@ public class Board extends Subject {
 
 
 
-    /**
-     * Returns the neighbour of the given space of the board in the given heading.
-     * The neighbour is returned only, if it can be reached from the given space
-     * (no walls or obstacles in either of the involved spaces); otherwise,
-     * null will be returned.
-     *
-     * @param space the space for which the neighbour should be computed
-     * @param heading the heading of the neighbour
-     * @return the space in the given direction; null if there is no (reachable) neighbour
-     */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        if (space.getWalls().contains(heading)) {
+            return null;
+        }
         int x = space.x;
         int y = space.y;
         switch (heading) {
+
             case SOUTH:
                 y = (y + 1) % height;
-                break;
+               break;
             case WEST:
                 x = (x + width - 1) % width;
-                break;
+               break;
             case NORTH:
                 y = (y + height - 1) % height;
                 break;
@@ -269,8 +184,15 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
+        Heading reverse = Heading.values()[(heading.ordinal() + 2) % Heading.values().length];
+        Space result = getSpace(x, y);
+        if (result != null) {
+            if (result.getWalls().contains(reverse)) {
+                return null;
+            }
+        }
 
-        return getSpace(x, y);
+        return result;//getSpace(x, y);
     }
 
     public String getStatusMessage() {
@@ -280,55 +202,53 @@ public class Board extends Subject {
 
         // XXX: V2 changed the status so that it shows the phase, the player and the step
         return "Phase: " + getPhase().name() +
-                ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
+                ",Current Player = " + getCurrentPlayer().getName() +
+                ", Step: " + getStep()+ "\n";
     }
 
-    public int getGameID() {
-        return gameID;
-    }
-
-    public void setGameID(int gameID) {
-        this.gameID = gameID;
-    }
-
-    public void setName(@NotNull String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-
-        if (this.name != null) {
-
-            return name;
-
-        } else {
-
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Navn");
-            dialog.setContentText("Indtast dit navn for spillet");
-            dialog.showAndWait();
-
-            if (dialog.getResult() != null) {
-                this.name = dialog.getResult();
-                return this.name;
-            }
-
-        }
-
-        return null;
+    public void nextPlayer(Player player) {
+        if (getPlayerNumber(player) == getPlayersNumber() - 1)
+            setCurrentPlayer(getPlayer(0));
+        else
+            setCurrentPlayer(getPlayer(getPlayerNumber(player) + 1));
 
     }
 
-    public Player getPlayerByDB(int i) {
-        if (i >= 0 && i < players.size()) {
-            for (Player player: players) {
-                if (player.getDbNo() == i)
-                    return player;
+    public Space getPriorityAntennaSpace() {
+        for (Space[] spaceArr : spaces) {
+            for (Space space : spaceArr) {
+                if (space.getActions().size() > 0 && space.getActions().get(0) instanceof PriorityAntenna) {
+                    return space;
+                }
             }
         }
+        return spaces[4][4]; // Default value, should never return this if board.csv is made with one.
+    }
+    public Space[][] getSpaces() {
+        return spaces;
+    }
 
-        return null;
+    public void setCheckpoints_Number() {
+        findCheckPoints();
+        Checkpoint.setlastCheckpointNumber(numOfCheckPoints);
+    }
+
+    private void findCheckPoints() {
+        int counter = 0;
+        for (Space[] space : spaces) {
+            for (int j = 0; j < spaces[0].length; j++) {
+                if (space[j].getActions().size() > 0 &&
+                        space[j].getActions().get(0) instanceof Checkpoint) {
+
+                    counter++;
+                }
+            }
+        }
+        numOfCheckPoints = counter;
+    }
+
+    public void setCheckpoint(Checkpoint checkpoint) {
+        this.checkpoints.add(checkpoint);
     }
 
 }

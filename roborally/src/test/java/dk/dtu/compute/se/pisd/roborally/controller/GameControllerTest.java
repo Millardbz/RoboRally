@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.exceptions.BoardNotFoundException;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -19,7 +20,7 @@ class GameControllerTest {
     @BeforeEach
     void setUp() {
         Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
-        gameController = new GameController(board);
+        //gameController = new GameController(board);
         for (int i = 0; i < 6; i++) {
             Player player = new Player(board, null,"Player " + i);
             board.addPlayer(player);
@@ -48,11 +49,12 @@ class GameControllerTest {
     }
 
     @Test
+
     void moveForward() {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
 
-        gameController.moveForward(current);
+        gameController.moveForward(current, 1);
 
         Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
@@ -85,5 +87,28 @@ class GameControllerTest {
 
         Assertions.assertEquals(Heading.EAST, current.getHeading(),
                 "Player " + current.getName() + " should be heading East!");
+    }
+
+
+    @Test
+    void testCheckPointsInCorrectOrder() {
+        Board board = null;
+        try {
+            board = SaveAndLoad.newBoard(2, "SprintCramp");
+            GameController gc = new GameController(null, board, null);
+
+            board.setCurrentPlayer(board.getPlayers().get(0));
+            gc.moveCurrentPlayerToSpace(board.getSpace(12, 8));
+            board.setCurrentPlayer(board.getPlayers().get(0));
+            gc.moveCurrentPlayerToSpace(board.getSpace(5, 2));
+            board.setCurrentPlayer(board.getPlayers().get(0));
+
+            gc.moveCurrentPlayerToSpace(board.getSpace(4, 9)); // Will cause exception
+
+        } catch (BoardNotFoundException e) {
+            Assertions.fail(); // Board not found
+        } catch (ExceptionInInitializerError e2) {
+            Assertions.assertEquals(3, board.getCurrentPlayer().checkPoints);
+        }
     }
 }

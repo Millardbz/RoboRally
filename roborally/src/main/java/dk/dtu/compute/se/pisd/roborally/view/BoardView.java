@@ -25,7 +25,6 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -34,29 +33,21 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
- */
+
 public class BoardView extends VBox implements ViewObserver {
 
     private Board board;
-
     private GridPane mainBoardPane;
-    private SpaceView[][] spaces;
-
+    //private SpaceView[][] spaces;
     private PlayersView playersView;
-
     private Label statusLabel;
-
-    private SpaceEventHandler spaceEventHandler;
+   // private SpaceEventHandler spaceEventHandler;
+    private final GameController gameController;
 
 
     public BoardView(@NotNull GameController gameController) {
+        this.gameController = gameController;
         board = gameController.board;
-
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
@@ -65,9 +56,9 @@ public class BoardView extends VBox implements ViewObserver {
         this.getChildren().add(playersView);
         this.getChildren().add(statusLabel);
 
-        spaces = new SpaceView[board.width][board.height];
+        SpaceView[][] spaces = new SpaceView[board.width][board.height];
 
-        spaceEventHandler = new SpaceEventHandler(gameController);
+        SpaceEventHandler spaceEventHandler= new SpaceEventHandler(gameController);
 
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
@@ -83,12 +74,26 @@ public class BoardView extends VBox implements ViewObserver {
         update(board);
     }
 
+
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {
             Phase phase = board.getPhase();
             statusLabel.setText(board.getStatusMessage());
         }
+    }
+
+    //copy
+    private void removeChildren() {
+        this.getChildren().remove(mainBoardPane);
+        this.getChildren().remove(playersView);
+        this.getChildren().remove(statusLabel);
+    }
+
+    private void addChildren() {
+        this.getChildren().add(mainBoardPane);
+        this.getChildren().add(playersView);
+        this.getChildren().add(statusLabel);
     }
 
     // XXX this handler and its uses should eventually be deleted! This is just to help test the
@@ -104,8 +109,8 @@ public class BoardView extends VBox implements ViewObserver {
         @Override
         public void handle(MouseEvent event) {
             Object source = event.getSource();
-            if (source instanceof SpaceView) {
-                SpaceView spaceView = (SpaceView) source;
+            if (source instanceof SpaceView spaceView) {
+                //SpaceView spaceView = (SpaceView) source;
                 Space space = spaceView.space;
                 Board board = space.board;
                 if (board == gameController.board) {
@@ -116,5 +121,17 @@ public class BoardView extends VBox implements ViewObserver {
         }
 
     }
+    //copy
+    public void updatePlayersView() {
+        removeChildren();
+        playersView = new PlayersView(gameController);
+        addChildren();
+    }
+
+
+    public PlayersView getPlayersView() {
+        return playersView;
+    }
+
 
 }

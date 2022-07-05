@@ -24,45 +24,45 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
-/**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
- */
+
 public class Player extends Subject {
 
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
+    final public static int ENERGY_START_COUNT = 5;
 
     final public Board board;
 
-    private String name;
-    private String color;
+    public String name;
+    public String color;
+    public int checkPoints;
+    public Space space;
+    public Heading heading = SOUTH;
+    public int energyCount;
+    public int priority;
 
-    private Space space;
-    private Heading heading = SOUTH;
 
-    private CommandCardField[] program;
-    private CommandCardField[] cards;
 
-    private DamageCardField[] damageCards;
 
-    private int lastCheckpoint;
+    private int checkpointNumber;
+    public CommandCardField[] program;
+    public CommandCardField[] cards;
 
-    public int no;
+    private final ArrayList<Command> damagecards;
 
-    private int dbNo;
     /**
      * contructor for each player object.
-     *
+     * <p>
      * Most interesting is that each player has an array, that represents the register that
      * is going to store the programming cards, that the player is going to have throughout the
      * progress of the game.
-     *
+     * <p>
      * There is another array representing the cards themselves.
+     *
      * @param board
      * @param color
      * @param name
@@ -71,7 +71,8 @@ public class Player extends Subject {
         this.board = board;
         this.name = name;
         this.color = color;
-
+        this.energyCount = ENERGY_START_COUNT;
+        this.damagecards = new ArrayList<>();
         this.space = null;
 
         program = new CommandCardField[NO_REGISTERS];
@@ -84,8 +85,6 @@ public class Player extends Subject {
             cards[i] = new CommandCardField(this);
         }
 
-        damageCards = new DamageCardField[1];
-        damageCards[0] = new DamageCardField(this);
     }
 
     public String getName() {
@@ -106,14 +105,15 @@ public class Player extends Subject {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-        notifyChange();
-        if (space != null) {
-            space.playerChanged();
+    /*
+        public void setColor(String color) {
+            this.color = color;
+            notifyChange();
+            if (space != null) {
+                space.playerChanged();
+            }
         }
-    }
-
+    */
     public Space getSpace() {
         return space;
     }
@@ -147,6 +147,15 @@ public class Player extends Subject {
         }
     }
 
+    public void setEnergyCount(int energyCount) {
+        this.energyCount = energyCount;
+    }
+
+    public int getEnergyCount() {
+        return energyCount;
+    }
+
+
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
@@ -155,26 +164,21 @@ public class Player extends Subject {
         return cards[i];
     }
 
-    public DamageCardField getDamageCardField(int i){return damageCards[i];}
 
-    public int getDbNo() {
-        return dbNo;
+    public void setDmgcards(Command card) {
+        this.damagecards.add(card);
     }
 
-    public void setDbNo(int dbNo) {
-        this.dbNo = dbNo;
+    public ArrayList<Command> getDmgcards() {
+        return this.damagecards;
     }
 
-    public void setLastCheckpoint(int lastCheckpoint) {
-        // we only update this if the new checkpoint number is higher than the one the player already has
-        if (lastCheckpoint == (this.lastCheckpoint + 1)) {
-            this.lastCheckpoint = lastCheckpoint;
-            notifyChange();
+
+
+
+        public int getCheckpointNumber () {
+            return checkpointNumber;
         }
-    }
-
-    public int getLastCheckpoint() {
-        return lastCheckpoint;
-    }
 
 }
+

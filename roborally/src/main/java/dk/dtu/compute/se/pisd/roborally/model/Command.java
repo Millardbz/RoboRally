@@ -26,34 +26,60 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
+
  */
 public enum Command {
 
-    FORWARD("Fwd"),
+    //Primary programming cards
+    MOVE1("Move 1"),
+    MOVE2("Move 2"),
+    MOVE3("Move 3"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
-    FAST_FORWARD("Fast Fwd"),
-    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT),
+    UTURN("U-Turn"),
+    MOVEBACK("Move Back"),
+    AGAIN("Again!"),
+
+    //Damage cards
+    SPAM("SPAM"),
+    TROJANHORSE("TROJAN HORSE"),
+    WORM("WORM"),
+    VIRUS("VIRUS"),
+
+    //Special programming cards
+    ENERGYROUTINE("Energy Routine"),
+    SANDBOXROUTINE("Sandbox Routine", MOVE1, MOVE2, MOVE3, MOVEBACK, LEFT, RIGHT, UTURN),
+    WEASELROUTINE("Weasel Routine", LEFT, RIGHT, UTURN),
+    SPEEDROUTINE("Speed Routine", MOVE3),
+    SPAMFOLDER("Spam Folder"),
+    REPEATROUTINE("Repeat Routine", AGAIN);
 
     final public String displayName;
 
-    final private List<Command> options;
+    public final List<Command> options;
 
     Command(String displayName, Command... options) {
         this.displayName = displayName;
-        this.options = Collections.unmodifiableList(Arrays.asList(options));
+        this.options = List.of(options);
+
     }
 
+    /**
+     * Check if the command is interactive (holds 1 or more options)
+     *
+     * @return true if there is 1 or more option and false if there isn't any
+     */
     public boolean isInteractive() {
         return !options.isEmpty();
     }
 
+    /**
+     * Get all available option for one command
+     *
+     * @return a list of all options
+     */
     public List<Command> getOptions() {
         return options;
     }
-
 }

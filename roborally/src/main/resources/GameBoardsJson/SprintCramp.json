@@ -1,0 +1,867 @@
+{
+  "width": 13,
+  "height": 10,
+  "spaces": [
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 0,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.PriorityAntenna",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 0,
+      "y": 4
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 0,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 1,
+      "y": 0
+    },
+    {
+      "walls": [
+        "WEST"
+      ],
+      "actions": [],
+      "x": 1,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 1,
+      "y": 4
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 1,
+      "y": 5
+    },
+
+
+    {
+      "walls": [
+        "WEST"
+      ],
+      "actions": [],
+      "x": 1,
+      "y": 8
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.StartGear",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 1,
+      "y": 9
+    },
+    {
+      "walls": [
+        "NORTH"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 0
+    },
+    {
+      "walls": [
+        "NORTH",
+        "EAST"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 2
+    },
+
+    {
+      "walls": [
+        "NORTH"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 4
+    },
+
+    {
+      "walls": [
+        "NORTH"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 5
+    },
+
+    {
+      "walls": [
+        "NORTH",
+        "WEST"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 7
+    },
+    {
+      "walls": [
+        "NORTH"
+      ],
+      "actions": [],
+      "x": 2,
+      "y": 9
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":3 ,
+      "y": 2
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":3 ,
+      "y": 8
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 0
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x": 4,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":4,
+      "y": 3
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 4
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 5
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":4 ,
+      "y": 8
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "checkpointNumber": 3
+          }
+        }
+      ],
+      "x": 4,
+      "y": 9
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "checkpointNumber": 2
+          }
+        }
+      ],
+      "x": 5,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":5,
+      "y": 3
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":5,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x": 5,
+      "y": 8
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":5 ,
+      "y": 9
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":6,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":6,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":6,
+      "y": 3
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":6 ,
+      "y": 6
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Energy",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 6,
+      "y": 5
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":6 ,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":7,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Energy",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 7,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":7 ,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":7 ,
+      "y": 7
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":8,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "SOUTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":8,
+      "y": 2
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "SOUTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":8,
+      "y": 3
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Energy",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 8,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":8 ,
+      "y": 7
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":9,
+      "y": 3
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Energy",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 9,
+      "y": 4
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":9,
+      "y": 5
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "SOUTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":9 ,
+      "y": 6
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "SOUTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":9 ,
+      "y": 7
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":10 ,
+      "y": 0
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":10 ,
+      "y": 1
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":10,
+      "y": 3
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "SOUTH",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":10,
+      "y": 4
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 1
+          }
+        }
+      ],
+      "x":10,
+      "y": 5
+    },
+
+    {
+      "walls": [
+        "WEST"
+      ],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Laser",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfLasers": 1
+          }
+        }
+      ],
+      "x": 10,
+      "y": 10
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":11 ,
+      "y": 1
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":11 ,
+      "y": 9
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":11 ,
+      "y": 7
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":11 ,
+      "y": 8
+    },
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.RebootToken",
+          "INSTANCE": {
+          }
+        }
+      ],
+      "x": 12,
+      "y": 0
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "WEST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":12 ,
+      "y": 1
+    },
+
+
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.ConveyorBelt",
+          "INSTANCE": {
+            "heading": "EAST",
+            "numberOfMoves": 2
+          }
+        }
+      ],
+      "x":12 ,
+      "y": 7
+    },
+    {
+      "walls": [],
+      "actions": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint",
+          "INSTANCE": {
+            "heading": "NORTH",
+            "checkpointNumber": 1
+          }
+        }
+      ],
+      "x": 12,
+      "y": 8
+    }
+
+  ]
+}

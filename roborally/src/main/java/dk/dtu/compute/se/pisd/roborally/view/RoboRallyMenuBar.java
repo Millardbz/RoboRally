@@ -25,13 +25,11 @@ import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
-/**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
- */
+/*  RoboRally MenuBar shows File and Server menu and some menu items that allows player to
+    create a game, load and save the game and connect to a server for a multiplayer game.
+*/
 public class RoboRallyMenuBar extends MenuBar {
 
     private AppController appController;
@@ -39,14 +37,18 @@ public class RoboRallyMenuBar extends MenuBar {
     private Menu controlMenu;
 
     private MenuItem saveGame;
-
     private MenuItem newGame;
-
     private MenuItem loadGame;
-
     private MenuItem stopGame;
-
     private MenuItem exitApp;
+
+    private  MenuItem MultiplayerGame;
+    private  MenuItem ConnectServer;
+    private  MenuItem DisconnectServer;
+    private  MenuItem Connecthostgame;
+
+
+    // RoboRally MenuBar constructor
 
     public RoboRallyMenuBar(AppController appController) {
         this.appController = appController;
@@ -71,12 +73,39 @@ public class RoboRallyMenuBar extends MenuBar {
         controlMenu.getItems().add(loadGame);
 
         exitApp = new MenuItem("Exit");
-        exitApp.setOnAction( e -> this.appController.exit());
+        exitApp.setOnAction( e -> this.appController.exitGame());
         controlMenu.getItems().add(exitApp);
+
+
+        Menu serverMenu = new Menu("Network Game");
+        this.getMenus().add(serverMenu);
+
+        ConnectServer = new MenuItem("Server connection");
+        ConnectServer.setOnAction(e -> this.appController.Client_ConnectToServer());
+        serverMenu.getItems().add(ConnectServer);
+
+        Connecthostgame = new MenuItem("Host game");
+        Connecthostgame.setOnAction(e -> {
+            this.appController.stopGame();
+            this.appController.ClientHostGame();
+        });
+        serverMenu.getItems().add(Connecthostgame);
+
+        DisconnectServer = new MenuItem("server disconnection");
+        DisconnectServer.setOnAction(e -> {
+            this.appController.Client_Disconnect_Server();
+            this.appController.stopGame();
+        });
+        serverMenu.getItems().add(DisconnectServer);
+
 
         controlMenu.setOnShowing(e -> update());
         controlMenu.setOnShown(e -> this.updateBounds());
+        serverMenu.setOnShowing(e -> update());
+        serverMenu.setOnShown(e -> this.updateBounds());
         update();
+
+
     }
 
     public void update() {
@@ -85,12 +114,18 @@ public class RoboRallyMenuBar extends MenuBar {
             stopGame.setVisible(true);
             saveGame.setVisible(true);
             loadGame.setVisible(false);
+
+            ConnectServer.setVisible(true);
+            Connecthostgame.setVisible(true);
+            DisconnectServer.setVisible(true);
+
         } else {
             newGame.setVisible(true);
             stopGame.setVisible(false);
             saveGame.setVisible(false);
             loadGame.setVisible(true);
         }
+
     }
 
 }

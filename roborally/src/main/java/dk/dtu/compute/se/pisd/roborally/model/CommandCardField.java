@@ -33,9 +33,10 @@ public class CommandCardField extends Subject {
 
     final public Player player;
 
-    private CommandCard card;
+    public CommandCard card;
 
-    private boolean visible;
+    public boolean visible;
+    private boolean active;
     /**
      * CommandCardField constructor.
      * @param player
@@ -74,4 +75,14 @@ public class CommandCardField extends Subject {
             notifyChange();
         }
     }
-}
+        public boolean isActive () {
+            return active;
+        }
+
+        public void setActive ( boolean active){
+            if (active != this.active) {
+                this.active = active;
+                notifyChange();
+            }
+        }
+    }

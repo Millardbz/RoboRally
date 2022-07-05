@@ -33,6 +33,6 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:17" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:17" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:17" level="project" />
-    <orderEntry type="library" name="Maven: org.json:json:20190722" level="project" />
+    <orderEntry type="library" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
   </component>
 </module>

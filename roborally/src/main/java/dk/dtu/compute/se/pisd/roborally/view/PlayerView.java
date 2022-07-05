@@ -23,10 +23,8 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,48 +33,53 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.TimerTask;
+
 /**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
+
  *
  */
 public class PlayerView extends Tab implements ViewObserver {
 
     private Player player;
+    private Checkpoint checkpoint;
 
-    private VBox top;
-
-    private Label programLabel;
     private GridPane programPane;
-    private Label cardsLabel;
-    private GridPane cardsPane;
-    private Label damageLabel;
+   // private GridPane cardsPane;
+
+   // private Label damageLabel;
+    //private Label programLabel;
+    //private Label cardsLabel;
 
     private CardFieldView[] programCardViews;
-    private CardFieldView[] cardViews;
+   // private CardFieldView[] cardViews;
 
     private VBox buttonPanel;
+    private VBox playerInteractionPanel;
+    //private VBox top;
 
-    private Button finishButton;
+    private static Button finishButton;
     private Button executeButton;
     private Button stepButton;
 
-    private VBox playerInteractionPanel;
-
     private GameController gameController;
+
+    public Label textLabel;
+    public Label checkpointNumberLabel;
+    private int checkpointNumber;
+
 
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
-        top = new VBox();
+        VBox top = new VBox();
         this.setContent(top);
 
         this.gameController = gameController;
         this.player = player;
 
-        programLabel = new Label("Program");
+        Label programLabel = new Label("Program");
 
         programPane = new GridPane();
         programPane.setVgap(2.0);
@@ -103,7 +106,10 @@ public class PlayerView extends Tab implements ViewObserver {
         stepButton = new Button("Execute Current Register");
         stepButton.setOnAction( e-> gameController.executeStep());
 
-        buttonPanel = new VBox(finishButton, executeButton, stepButton);
+        textLabel = new Label("Timer: " + "30");
+        checkpointNumberLabel = new Label("Count checkpoints: " + this.player.getCheckpointNumber());
+
+        buttonPanel = new VBox(finishButton, executeButton, stepButton,  checkpointNumberLabel);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
         buttonPanel.setSpacing(3.0);
         // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
@@ -112,11 +118,11 @@ public class PlayerView extends Tab implements ViewObserver {
         playerInteractionPanel.setAlignment(Pos.CENTER_LEFT);
         playerInteractionPanel.setSpacing(3.0);
 
-        cardsLabel = new Label("Command Cards");
-        cardsPane = new GridPane();
+        Label cardsLabel= new Label("Command Cards");
+        GridPane cardsPane = new GridPane();
         cardsPane.setVgap(2.0);
         cardsPane.setHgap(2.0);
-        cardViews = new CardFieldView[Player.NO_CARDS];
+        CardFieldView[] cardViews = new CardFieldView[Player.NO_CARDS];
         for (int i = 0; i < Player.NO_CARDS; i++) {
             CommandCardField cardField = player.getCardField(i);
             if (cardField != null) {
@@ -124,10 +130,10 @@ public class PlayerView extends Tab implements ViewObserver {
                 cardsPane.add(cardViews[i], i, 0);
             }
         }
-        damageLabel = new Label("Number of SPAM cards: " + player.getDamageCardField(0).getCard().getAmount());
-        damageLabel.setAlignment(Pos.BASELINE_RIGHT);
+        //damageLabel = new Label("Number of Damage card: " + player.getDmgcards());
+        //damageLabel.setAlignment(Pos.BASELINE_RIGHT);
 
-        top.getChildren().add(damageLabel);
+
         top.getChildren().add(programLabel);
         top.getChildren().add(programPane);
         top.getChildren().add(cardsLabel);
@@ -137,10 +143,24 @@ public class PlayerView extends Tab implements ViewObserver {
             player.board.attach(this);
             update(player.board);
         }
+        if (player != null)
+            player.attach(this);
+
+    }
+    private TimerTask countDownStep(int count) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                setFinishButtonText("finish programming (" + count + ")");
+            }
+        };
     }
 
     @Override
     public void updateView(Subject subject) {
+        if (subject == player) {
+            this.checkpointNumberLabel.setText("Count checkpoints: " + ((Player) subject).getCheckpointNumber());
+        }
         if (subject == player.board) {
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
@@ -203,6 +223,19 @@ public class PlayerView extends Tab implements ViewObserver {
                 }
                 playerInteractionPanel.getChildren().clear();
 
+                // copy
+                Command current = player.getProgramField(player.board.getStep()).getCard().command;
+                if (current.isInteractive()) {
+                    for (Command command : current.getOptions()) {
+                        Button optionButton = new Button(command.toString());
+                        optionButton.setOnAction(e -> gameController.execute_Command_Activation(command));
+                        optionButton.setDisable(false);
+                        playerInteractionPanel.getChildren().add(optionButton);
+
+                    }
+                }
+
+                /*
                 Button optionButton = new Button("Left");
                 optionButton.setOnAction(e -> gameController.executeCommandAndContinue(Command.LEFT));
                 optionButton.setDisable(false);
@@ -212,12 +245,17 @@ public class PlayerView extends Tab implements ViewObserver {
                 optionButton.setOnAction(e -> gameController.executeCommandAndContinue(Command.RIGHT));
                 optionButton.setDisable(false);
                 playerInteractionPanel.getChildren().add(optionButton);
-
+*/
             }
         }
 
 
 
     }
-
+    public Player getPlayer() {
+        return player;
+    }
+    public static void setFinishButtonText(String string) {
+        finishButton.setText(string);
+    }
 }

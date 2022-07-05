@@ -23,155 +23,153 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.httpclient.Client;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.fileaccess.LoadBoard;
+import dk.dtu.compute.se.pisd.roborally.exceptions.BoardNotFoundException;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.IOUtil;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.SerializeState;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.application.Platform;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 /**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * Controls the application before the game is started
+
  */
 public class AppController implements Observer {
-
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
-    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
-    final private List<String> BOARD_SIZES = Arrays.asList("Small","Medium","Large");
-
-    private List<String> BOARDS = null;
-
     final private RoboRally roboRally;
-
     private GameController gameController;
+    private final Client client = new Client();
+    private boolean serverClientMode = false;
 
 
-
-    /**
-     * This method instantiates a roboRally game object
-     * @param roboRally
-     */
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
     }
+
     /**
-     * This method provides the players of the game, the opportunity to begin a new game in the UI.
-     * And begins the game, when the number of participants of the game has been chosen, in the if-
-     * statements below the UI-functions. Below the if-statements, a new gameboard has been initiated
-     * and the players will be added to the board.
+     * Used by the new game menu option to start a new game
      */
     public void newGame() {
-        ChoiceDialog<Integer> dialogPlayerAmount = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        dialogPlayerAmount.setTitle("Player number");
-        dialogPlayerAmount.setHeaderText("Select number of players");
-        Optional<Integer> playerAmount = dialogPlayerAmount.showAndWait();
+        Optional<Integer> numPlayers = AppController.ChooseNumberOfPlayers(PLAYER_NUMBER_OPTIONS);
 
-        ChoiceDialog<String> dialogBoardSize = new ChoiceDialog<>(BOARD_SIZES.get(0), BOARD_SIZES);
-        dialogBoardSize.setTitle("Board Size");
-        Optional<String> boardSize = dialogBoardSize.showAndWait();
-
-        TextInputDialog dialogBoardName = new TextInputDialog();
-        dialogBoardName.setTitle("Board Name");
-        dialogBoardName.showAndWait();
-
-        if (playerAmount.isPresent()) {
-            if (gameController != null) {
-                // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
-                if (!stopGame()) {
-                    return;
-                }
-            }
-            int w = 0, h = 0;
-            switch (boardSize.get()){
-                case "Small" -> {
-                    w = 8;
-                    h = 8;
-                }
-                case "Medium" -> {
-                    w = 12;
-                    h = 8;
-                }
-                case "Large" -> {
-                    w = 16;
-                    h = 8;
-                }
-
-            }
-            // XXX the board should eventually be created programmatically or loaded from a file
-            // here we just create an empty board with the required number of players.
-
-            Board board = new Board(w,h,dialogBoardName.getResult());
-            gameController = new GameController(board);
-            int no = playerAmount.get();
-            for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
-                board.addPlayer(player);
-                player.setSpace(board.getSpace(i % board.width, i));
-            }
-
-            // XXX: V2
-            // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
-
-            roboRally.createBoardView(gameController);
+        if (numPlayers.isPresent()) {
+            if (gameController != null && !stopGame()) return;
+            createNewGame(numPlayers.get(), false);
         }
     }
-    /**
-     * Save current game.
-     */
+
+
+     // Creates a new game and shows the game
+
+    private void createNewGame(int numPlayers, boolean prevFailed) {
+        //Optional<String> chosenBoard = askUserWhichDefaultBoard(prevFailed);
+
+        Optional<String> chosenBoard = AppController.ChooseBoardName(IOUtil.getBoardGameName());
+        if (chosenBoard.isPresent()) {
+            try {
+                Board board = SaveAndLoad.newBoard(numPlayers, chosenBoard.get());
+                setupGameController(board);
+                if (client.isConnectedToServer())
+                    client.updateGame(SerializeState.serializeGame(board));
+            } catch (BoardNotFoundException e) {
+                createNewGame(numPlayers, true);
+            }
+        }
+    }
+
+    //allows players to write a text dialog
+    public static String getInput_text(String[] input) {
+        TextInputDialog serverCreation = new TextInputDialog();
+        serverCreation.setTitle(input[0]);
+        serverCreation.setHeaderText(input[1]);
+        Optional<String> choise = serverCreation.showAndWait();
+        if (!choise.isEmpty())
+            return choise.get();
+        return null;
+    }
+
+    //ask users for number of players in a dialog box
+    public static Optional<Integer> ChooseNumberOfPlayers(List<Integer> list) {
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(list.get(0), list);
+        dialog.setTitle("Player number");
+        dialog.setHeaderText("Select number of players");
+
+        return dialog.showAndWait();
+    }
+
+
+    // ask players to choose a game board
+    public static Optional<String> ChooseBoardName(List<String> list) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(list.get(0), list);
+        dialog.setTitle("CHOOSE BOARD");
+        dialog.setHeaderText("Select a board to play");
+
+        return dialog.showAndWait();
+    }
+
+    // give a warning
+    public static Optional<ButtonType> warningCase(String[] input) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(input[0]);
+        alert.setContentText(input[1]);
+        return alert.showAndWait();
+    }
+
+    // Save game Stage and let a player write a name and  save a game
     public void saveGame() {
-        LoadBoard.saveBoard(gameController.board, gameController.board.boardName);
+            String[] s = new String[]{"SAVE YOUR GAME", "Write a name and save your game"};
+            String dialog = AppController.getInput_text(s);
+
+            if (dialog != null)
+                SaveAndLoad.SaveBoardGame(gameController.board, dialog);
+        }
+
+    // player can load a game
+    private void createLoadedGame() {
+        Optional<String> chosenBoard = AppController.ChooseBoardName(IOUtil.getSavedBoardsName());
+
+        if (chosenBoard.isPresent()) {
+            try {
+                if ("Name".equals(chosenBoard.get())) {
+                    System.out.println("Is the same");
+                }
+
+                Board board = SaveAndLoad.loadBoardGame(chosenBoard.get());
+                setupGameController(board);
+            } catch (BoardNotFoundException e) {
+                createLoadedGame();
+            }
+        }
     }
 
-    /**
-     * Load saved game.
-     */
     public void loadGame() {
-
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            URL url = loader.getResource("boards");
-            if(url != null){
-                BOARDS = Arrays.asList(Objects.requireNonNull(new File(url.getPath()).list()));
-            }
-            else{
-                System.out.println("Invalid URL");
-            }
-            ChoiceDialog<String> choice = new ChoiceDialog<>(BOARDS.get(0), BOARDS);
-            choice.setTitle("Choose save:");
-            Optional<String> save = choice.showAndWait();
-
-            Board board = LoadBoard.loadBoard(save.get());
-            gameController = new GameController(board);
-            roboRally.createBoardView(gameController);
+        if (gameController == null) {
+            createLoadedGame();
+        }
     }
 
-    /**
-     * Stop playing the current game, giving the user the option to save
-     * the game or to cancel stopping the game. The method returns true
-     * if the game was successfully stopped (with or without saving the
-     * game); returns false, if the current game was not stopped. In case
-     * there is no current game, false is returned.
-     *
-     * @return true if the current game was stopped, false otherwise
-     */
+     // start a new game and shows the Gui. setup game controller Uses board to create the game
+    private void setupGameController(Board board) {
+        gameController = new GameController(this, Objects.requireNonNull(board), serverClientMode ? client : null);
+        board.setCurrentPlayer(board.getPlayer(0));
+        gameController.startProgrammingPhase();
+        roboRally.createBoardView(gameController);
+    }
+
+
     public boolean stopGame() {
         if (gameController != null) {
-
-            // here we save the game (without asking the user).
-            saveGame();
 
             gameController = null;
             roboRally.createBoardView(null);
@@ -179,24 +177,16 @@ public class AppController implements Observer {
         }
         return false;
     }
-    /**
-     * The first conditional makes sure, that this function can only be invoked as long as a game
-     * has been instantiated. Below that conditional, a UI dialog begins, asking the user, weather
-     * the user is sure, that he/she wants to quit the game. The option to quit the game or not to
-     * quit the game is being provided by a UI botton function, that performs the termination the game
-     * if the user confirms that the do want to quit the game and resumes the game, if the do not
-     * want to quit the game.
-     *
-     * @return an application that has been shut down.
-     */
-    public void exit() {
-        if (gameController != null) {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Exit RoboRally?");
-            alert.setContentText("Are you sure you want to exit RoboRally?");
-            Optional<ButtonType> result = alert.showAndWait();
 
-            if (!result.isPresent() || result.get() != ButtonType.OK) {
+
+     //Shows a window and ask player to exit the game or not.
+
+    public void exitGame() {
+        if (gameController != null) {
+            String[] s = new String[]{"Exit RoboRally?", "Are you sure you want to exit RoboRally?"};
+            Optional<ButtonType> result = AppController.warningCase(s);
+
+            if (result.isEmpty() || result.get() != ButtonType.OK) {
                 return; // return without exiting the application
             }
         }
@@ -204,31 +194,73 @@ public class AppController implements Observer {
         // If the user did not cancel, the RoboRally application will exit
         // after the option to save the game
         if (gameController == null || stopGame()) {
+            client.leaveGame();
             Platform.exit();
         }
     }
-    /**
-     * This boolean function determines weather the game is running or not.
-     * If this boolean is true, that means that a game is running and makes sure that
-     * throughout the process of running the game, the gameController object is going to be
-     * present, thereby prevent the game from running the without a gameController object.
-     * In other words, nobody is interested in running the game without the game control measures.
-     *
-     * @return
-     */
+
+
+    //player Disconnects from the server
+    public void Client_Disconnect_Server() {
+        client.leaveGame();
+    }
+
+
+    //return true if game is running
     public boolean isGameRunning() {
         return gameController != null;
     }
 
-    /**
-     * The purpose of this function is to update the events displayed on the game UI.
-     * for example, if a robot moves, this motion is going to be shown on the roborally board
-     * user interface.
-     * @param subject the subject which changed
-     */
+
     @Override
     public void update(Subject subject) {
         // XXX do nothing for now
     }
 
+    public RoboRally getRoboRally() {
+        return roboRally;
+    }
+
+
+    // Make a Hosts game on the server and starts the game
+    public void ClientHostGame(String... errorMessage) {
+        String[] box = new String[]{"Multiplayer game ", "Write your server Name:"};
+        if (errorMessage.length != 0)
+            box[1] = errorMessage[0] + "\n Try again";
+        String result = AppController.getInput_text(box);
+        if (result == null)
+            return;
+        String response = client.hostGame(result);
+        if (!Objects.equals(response, "success"))
+            ClientHostGame(response);
+        else {
+            serverClientMode = true;
+            newGame();
+        }
+    }
+
+
+    // Player chooses an ID from server table and joins the game
+    public void ClientJoinGame(String id) {
+        String message = client.joinGame(id);
+        if (message.equals("ok")) {
+            serverClientMode = true;
+            Board board = SerializeState.deserializeGame(client.getGameState(), true);
+            setupGameController(board);
+            gameController.setPlayerNumber(client.getRobotNumber());
+
+        } else
+        AppController.warningCase(new String[]{"Error", message, "refresh and try again"});
+    }
+
+    // player can see the available servers on the server table
+    public void Client_ConnectToServer() {
+        String serverList = client.listGames(); //gets the list of servers in the table
+        if (serverList.equals("server timeout")) { //Give a massage to player if server is not reachable
+            AppController.warningCase(new String[]{"error", serverList, "try again"});
+            return;
+        }
+        RoboRally.addServer(serverList); //adds the servers to the view
+
+    }
 }

@@ -22,70 +22,175 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.*;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
- *
- */
-public class SpaceView extends StackPane implements ViewObserver {
+import java.util.Objects;
 
+/*  this class shows  different elements on the board game
+    like background, conveyorbelts, Laser, Pushpanel, Pit , wall and check points
+    and update player and view for users
+*/
+
+public class SpaceView extends StackPane implements ViewObserver {
+/*
     final public static int SPACE_HEIGHT = 40; // 60; // 75;
     final public static int SPACE_WIDTH = 40;  // 60; // 75;
+*/
+    public Space space;
 
-    public final Space space;
-
+    //space view constructor with parameter space
 
     public SpaceView(@NotNull Space space) {
+
         this.space = space;
+        this.setId("space");
+        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Images/RoboRally_Stylesheet.css")).toExternalForm());
 
-        // XXX the following styling should better be done with styles
-        this.setPrefWidth(SPACE_WIDTH);
-        this.setMinWidth(SPACE_WIDTH);
-        this.setMaxWidth(SPACE_WIDTH);
+        // background's board
+        ImageView bg = new ImageView(new Image("Images/background.png"));
+        this.getChildren().add(bg);
 
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
-        this.setMaxHeight(SPACE_HEIGHT);
+        //conveyorBelt
+        if (space.getActions().size() > 0) {
+            ImageView imageView;
+            if (space.getActions().get(0) instanceof ConveyorBelt conveyorBelt) {
+                Image conveyor;
+                if (conveyorBelt.getNumberOfMoves() <= 1) {
+                    conveyor = new Image("Images/conveyorBelt.png");
+                } else {
+                    conveyor = new Image("Images/conveyorBeltBlue.png");
+                }
+                imageView = new ImageView(conveyor);
+                imageView.setRotate((90 * conveyorBelt.getHeading().ordinal()) % 360);
+                this.getChildren().add(imageView);
 
-        if ((space.x + space.y) % 2 == 0) {
-            this.setStyle("-fx-background-color: white;");
-        } else {
-            this.setStyle("-fx-background-color: black;");
+                //Lasers
+            } else if (space.getActions().get(0) instanceof Laser laser) {
+                imageView = new ImageView(new Image("laser" + laser.getNumberOfLasers() + ".png"));
+                imageView.setRotate((90 * laser.getHeading().ordinal()) % 360);
+                this.getChildren().add(imageView);
+
+                //PushPanels
+            } else if (space.getActions().get(0) instanceof PushPanel pushPanel) {
+                imageView = new ImageView(new Image("Images/pushPanel.png"));
+                imageView.setRotate((90 * pushPanel.getHeading().ordinal()) % 360);
+                this.getChildren().add(imageView);
+
+                //Energy
+            } else if (space.getActions().get(0) instanceof Energy) {
+                imageView = new ImageView(new Image("Images/energy.png"));
+                this.getChildren().add(imageView);
+
+                //Rotating Gear Right and Left
+            } else if (space.getActions().get(0) instanceof RotatingGear rotatingGear) {
+                if (rotatingGear.getDirection() == RotatingGear.Direction.RIGHT) {
+                    imageView = new ImageView(new Image("Images/rotatingGearRight.png"));
+                } else {
+                    imageView = new ImageView(new Image("Images/rotatingGearLeft.png"));
+                }
+                this.getChildren().add(imageView);
+
+                //Pit
+            } else if (space.getActions().get(0) instanceof Pit) {
+                imageView = new ImageView(new Image("Images/pit.png"));
+                this.getChildren().add(imageView);
+
+                //numbers of Check Points
+            } else if (space.getActions().get(0) instanceof Checkpoint checkpoint) {
+                switch (checkpoint.getCheckpointNumber()) {
+                    case 1 -> imageView = new ImageView(new Image("Images/checkPoint1.png"));
+                    case 2 -> imageView = new ImageView(new Image("Images/checkPoint2.png"));
+                    case 3 -> imageView = new ImageView(new Image("Images/checkPoint3.png"));
+                    case 4 -> imageView = new ImageView(new Image("Images/checkPoint4.png"));
+                    case 5 -> imageView = new ImageView(new Image("Images/checkPoint5.png"));
+                    case 6 -> imageView = new ImageView(new Image("Images/checkPoint6.png"));
+                    default -> imageView = new ImageView(new Image("Images/background.png"));
+                }
+                this.getChildren().add(imageView);
+
+                //Antenna
+            } else if (space.getActions().get(0) instanceof PriorityAntenna) {
+                imageView = new ImageView(new Image("Images/priorityAntenna.png"));
+                this.getChildren().add(imageView);
+
+                //Starting Gear
+            } else if (space.getActions().get(0) instanceof StartGear) {
+                imageView = new ImageView(new Image("Images/startinggear.png"));
+                this.getChildren().add(imageView);
+
+                //Reboot
+            } else if (space.getActions().get(0) instanceof RebootToken) {
+                imageView = new ImageView(new Image("Images/reboot.png"));
+                this.getChildren().add(imageView);
+            }
+
         }
 
-        // updatePlayer();
+            //Walls
+        for (Heading wall : space.getWalls()) {
+            ImageView wallPic = new ImageView(new Image("Images/wall.png"));
+            wallPic.setRotate((90 * wall.ordinal()) % 360);
+            this.getChildren().add(wallPic);
+        }
 
-        // This space view should listen to changes of the space
+
         space.attach(this);
         update(space);
     }
+/*
+                // XXX the following styling should better be done with styles
+                this.setPrefWidth(SPACE_WIDTH);
+                this.setMinWidth(SPACE_WIDTH);
+                this.setMaxWidth(SPACE_WIDTH);
+
+                this.setPrefHeight(SPACE_HEIGHT);
+                this.setMinHeight(SPACE_HEIGHT);
+                this.setMaxHeight(SPACE_HEIGHT);
+
+                if ((space.x + space.y) % 2 == 0) {
+                    this.setStyle("-fx-background-color: white;");
+                  }
+                else {
+                    this.setStyle("-fx-background-color: black;");
+                }
+
+
+        // This space view should listen to changes of the space
+        space.attach(this);
+        update(this.space);
+
+    }*/
 
     private void updatePlayer() {
-        this.getChildren().clear();
+        // this.getChildren().clear();
 
+        for (int i = 0; i < this.getChildren().size(); i++) {
+            if (this.getChildren().get(i).getClass().getSimpleName().equals("Polygon")) {
+                this.getChildren().remove(i);
+            }
+        }
         Player player = space.getPlayer();
         if (player != null) {
             Polygon arrow = new Polygon(0.0, 0.0,
                     10.0, 20.0,
-                    20.0, 0.0 );
+                    20.0, 0.0);
             try {
                 arrow.setFill(Color.valueOf(player.getColor()));
             } catch (Exception e) {
                 arrow.setFill(Color.MEDIUMPURPLE);
             }
 
-            arrow.setRotate((90*player.getHeading().ordinal())%360);
+            arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
             this.getChildren().add(arrow);
         }
 
@@ -98,7 +203,9 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (subject == this.space) {
             updatePlayer();
         }
-
+    }
+}
+/*
         boolean[] hasWall = new boolean[]{
                 space.x == 3 && space.y == 4,
                 space.x == 4 && space.y == 5,
@@ -176,5 +283,8 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
 
     }
+*/
 
-}
+
+
+

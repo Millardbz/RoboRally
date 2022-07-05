@@ -22,17 +22,15 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.controller.fieldaction.FieldAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
-
 /**
  * ...
- *
- * @author Ekkart Kindler, ekki@dtu.dk
+
  *
  */
 public class Space extends Subject {
@@ -41,14 +39,13 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
-    String conveyorBelt = null;
-    public boolean hasLaser;
+    //String conveyorBelt = null;
+    //public boolean hasLaser;
     private Player player;
+
+    private final List<Heading> walls = new ArrayList<>();
+    public final List<FieldAction> actions = new ArrayList<>();
     private int startPlayerNo;
-
-    public List<FieldAction> actions = new ArrayList<>();
-    private List<Heading> walls = new ArrayList<>();
-
     /**
      * Space constructor.
      * @param board
@@ -83,58 +80,21 @@ public class Space extends Subject {
     }
 
     /**
-     * Get neighbour space based on heading.
-     * @param heading
-     * @return
-     */
-    public Space getNeighbourSpace(Heading heading) {
-        int newX, newY;
-        switch (heading) {
-
-            case NORTH:
-                newX = x;
-                newY = (y - 1) % board.height;
-
-                if (newY == -1)
-                    newY = 7;
-
-                break;
-            case SOUTH:
-                newX = x;
-                newY = (y + 1) % board.height;
-                break;
-            case WEST:
-                newX = (x - 1) % board.width;
-
-                if (newX == -1)
-                    newX = 7;
-
-                newY = y;
-                break;
-            case EAST:
-                newX = (x + 1) % board.width;
-                newY = y;
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + heading);
-        }
-
-        return this.board.getSpace(newX, newY);
-
-    }
-    /**
      * set conveyor belt with a string containing level and first letter of a heading
+     * @param lvlHeading
      */
-    public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
+   // public void setConveyorBelt(String lvlHeading){conveyorBelt = lvlHeading;}
 
-    public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
+   // public String getConveyorBelt(){return conveyorBelt;}
+
+   // public void setLaser(boolean hasLaser){this.hasLaser = hasLaser;}
 
     /**
      * Determines the spaces that have a wall and what heading
-     * @param heading
+     * @param
      * @return
      */
+    /*
     public boolean hasWallAtHeading(Heading heading){
         int x = player.getSpace().x;
         int y = player.getSpace().y;
@@ -157,30 +117,11 @@ public class Space extends Subject {
         }
         return false;
     }
-
-    public List<FieldAction> getActions() {
-        return actions;
-    }
-
-    public String getConveyorBelt() {
-        return conveyorBelt;
-    }
-
-
-    public void addAction(FieldAction action) {
-        this.actions.add(action);
-
-        if (action instanceof CheckPoint) {
-            this.board.setCheckpoints((CheckPoint) action);
-        }
-
-        notifyChange();
-    }
+*/
 
     public List<Heading> getWalls() {
         return walls;
     }
-
     public void addWall(Heading heading) {
         if ( ! walls.contains(heading)) {
             walls.add(heading);
@@ -188,29 +129,17 @@ public class Space extends Subject {
         }
     }
 
-
-    public void addGear(Direction direction) {
-        boolean check = false;
-
-        for (FieldAction action : actions) {
-            if (action instanceof Gear) {
-                check = true;
-            }
-        }
-
-        if (!check) {
-            this.actions.add(new Gear(direction));
-            notifyChange();
-        }
+    public List<FieldAction> getActions() {
+        return actions;
     }
+    public void addAction(FieldAction action) {
+        this.actions.add(action);
 
-    public void setStartPlayerNo(int startPlayerNo) {
-        this.startPlayerNo = startPlayerNo;
+        if (action instanceof Checkpoint) {
+            this.board.setCheckpoint((Checkpoint) action);
+        }
+
         notifyChange();
-    }
-
-    public int getStartPlayerNo() {
-        return startPlayerNo;
     }
 
     void playerChanged() {
@@ -219,5 +148,12 @@ public class Space extends Subject {
         // notify the space of these changes by calling this method.
         notifyChange();
     }
+    public void setStartPlayerNo(int startPlayerNo) {
+        this.startPlayerNo = startPlayerNo;
+        notifyChange();
+    }
 
+    public int getStartPlayerNo() {
+        return startPlayerNo;
+    }
 }
